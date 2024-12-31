@@ -20,9 +20,10 @@ pub fn main() void {
 // a little while. For now, we're using what we know.
 //
 // This function prints, but does not return anything.
-//
-fn printPowersOfTwo(numbers: [4]u16) ??? {
-    loop (numbers) |n| {
+// komentarz VOID - funkcja nie zwraca wartości WIEC MUSI BYC VOID A NIE JAKIES DANE
+// BO JAK PISZESZ U16 CZY COS TO SUGERUJE ZE FUNKCJA POWINNA ZWROCIC  WARTOSC I TAKIM PARAMETRZE
+fn printPowersOfTwo(numbers: [4]u16) void {
+    for (numbers) |n| {
         std.debug.print("{} ", .{twoToThe(n)});
     }
 }
@@ -31,13 +32,13 @@ fn printPowersOfTwo(numbers: [4]u16) ??? {
 // exercise. But don't be fooled! This one does the math without the aid
 // of the standard library!
 //
-fn twoToThe(number: u16) ??? {
+fn twoToThe(number: u16) u16 {
     var n: u16 = 0;
     var total: u16 = 1;
 
-    loop (n < number) : (n += 1) {
+    while (n < number) : (n += 1) {
         total *= 2;
     }
 
-    return ???;
+    return total;
 }

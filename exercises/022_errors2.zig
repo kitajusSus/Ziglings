@@ -18,8 +18,9 @@ const std = @import("std");
 
 const MyNumberError = error{TooSmall};
 
-pub fn main() void {
-    var my_number: ??? = 5;
+pub fn main() {
+    var my_number: MyNumberError!u16 = 5;
+    // wykrzyknik sprawia ze my_number moze byc albo u16 albo MyNumberError  czyli albo bedzie cyferka albo bedzie bledem
 
     // Looks like my_number will need to either store a number OR
     // an error. Can you set the type correctly above?
@@ -27,3 +28,7 @@ pub fn main() void {
 
     std.debug.print("I compiled!\n", .{});
 }
+
+// BONUSOWY KOD POKAZYJĄCY JAK TO DZIAŁA PO MOJEMU NA PRZYKŁADZIE
+//
+

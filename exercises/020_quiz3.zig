@@ -32,7 +32,8 @@ fn printPowersOfTwo(numbers: [4]u16) void {
 // exercise. But don't be fooled! This one does the math without the aid
 // of the standard library!
 //
-fn twoToThe(number: u16) u16 {
+fn twoToThe(number: u16) u16 { // jesli  funcja ma ci dac jakas informacje to zapisz jaka to bedzie informacja
+    // tutaj mamy (numer: u16)<--- informacja która "wchodzi w funkcję" a obok jest u16 czyli informacja która ucieka z funkcji jako output return total
     var n: u16 = 0;
     var total: u16 = 1;
 

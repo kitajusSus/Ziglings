@@ -26,7 +26,6 @@ const std = @import("std");
 
 pub fn main() void {
     const lang_chars = [_]u8{ 26, 9, 7, 42 };
-
     for (lang_chars) |c| {
         switch (c) {
             1 => std.debug.print("A", .{}),
@@ -41,13 +40,18 @@ pub fn main() void {
             10 => std.debug.print("J", .{}),
             // ... we don't need everything in between ...
             25 => std.debug.print("Y", .{}),
-            26 => std.debug.print("Z", .{}),
+            26 => x("z"),
             // Switch statements must be "exhaustive" (there must be a
             // match for every possible value).  Please add an "else"
             // to this switch to print a question mark "?" when c is
             // not one of the existing matches.
+            else => std.debug.print("?", .{}),
         }
     }
 
     std.debug.print("\n", .{});
+}
+
+fn x(y: anytype) void {
+    return std.debug.print("{s}", .{y}); // {s} sprawia ze y jest traktowane jako string i wyswietlany jest jako string. mozna  zamiast tego dodac {any} ale to sprawia ze `y` jest traktowany w uniwersalny sposób czyli jako cyferki  "z" = 122 czy cos takiego
 }

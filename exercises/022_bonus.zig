@@ -6,17 +6,13 @@ const std = @import("std");
 const MyNumberError = error{TooSmall};
 
 // Funkcja bonus1, która sprawdza czy liczba jest większa od 10
-fn bonus1() u16!MyNumberError {
-    const my_number: u16!MyNumberError = 5;
+fn bonus1() !u16 {
+    const my_number: u16 = 5;
 
-    if (my_number) |number| {
-        if (number <= 10) {
-            return MyNumberError.TooSmall;
-        }
-        return number; // Zwracanie tylko wartości typu u16
-    } else |err| {
-        return err;
+    if (my_number <= 10) {
+        return MyNumberError.TooSmall;
     }
+    return my_number; // Zwracanie tylko wartości typu u16
 }
 
 pub fn main() void {
@@ -31,9 +27,10 @@ pub fn main() void {
         // Jeśli funkcja zwróciła błąd
         if (err == MyNumberError.TooSmall) {
             std.debug.print("Błąd: Liczba jest za mała.\n", .{});
-        } else {
-            // Obsługa innych potencjalnych błędów
-            std.debug.print("Niezidentyfikowany błąd: {}\n", .{@errorName(err)});
         }
     }
 }
+
+// chciałem pokazac ze potrafię samodzielnie napisac kod uzywajac jeddynie notatek z poprzeddnich zadan ale niestety musiałem zejrzec na reddit. obecnie uznaje ze całkiem fajnie sie uzywa tego zig i polecam.
+//
+//

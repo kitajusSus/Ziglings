@@ -40,7 +40,8 @@ pub fn main() void {
             10 => std.debug.print("J", .{}),
             // ... we don't need everything in between ...
             25 => std.debug.print("Y", .{}),
-            26 => x("z"),
+            26 => num(2),
+
             // Switch statements must be "exhaustive" (there must be a
             // match for every possible value).  Please add an "else"
             // to this switch to print a question mark "?" when c is
@@ -51,7 +52,11 @@ pub fn main() void {
 
     std.debug.print("\n", .{});
 }
-
+// samodzielnie zrobione funkcje nie było ich w oryginalnym kodzie chciałem cos sprawdzic
 fn x(y: anytype) void {
     return std.debug.print("{s}", .{y}); // {s} sprawia ze y jest traktowane jako string i wyswietlany jest jako string. mozna  zamiast tego dodac {any} ale to sprawia ze `y` jest traktowany w uniwersalny sposób czyli jako cyferki  "z" = 122 czy cos takiego
+}
+
+fn num(z: anytype) void {
+    return std.debug.print("{any}", .{z}); //
 }

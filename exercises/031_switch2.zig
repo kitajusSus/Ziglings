@@ -28,15 +28,16 @@ pub fn main() void {
             10 => 'J',
             // ...
             25 => 'Y',
-            26 => 'Z',
+            26 => '1',
             // As in the last exercise, please add the 'else' clause
             // and this time, have it return an exclamation mark '!'.
+            else => '!',
         };
 
         std.debug.print("{c}", .{real_char});
         // Note: "{c}" forces print() to display the value as a character.
         // Can you guess what happens if you remove the "c"? Try it!
     }
-
+    // note: when we dont use the {c} in the print statement it will print the ascii  code value oof the character
     std.debug.print("\n", .{});
 }

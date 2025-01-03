@@ -30,12 +30,16 @@ pub fn main() void {
     for (more_nums) |n| {
         std.debug.print("{} ", .{n});
     }
-
+    // bonus function to print a more_nums
+    for (more_nums) |n| {
+        std.debug.print("more_nums[{}]: {},", .{ n, more_nums[n] });
+    }
     std.debug.print("\n", .{});
 }
 
 // This function should take a reference to a u8 value and set it
 // to 5.
+
 fn makeFive(x: *u8) void {
-    ??? = 5; // fix me!
+    x.* = 5; // THIS IS HOW YOU CHANGE THE VALUE OF THE POINTER!
 }

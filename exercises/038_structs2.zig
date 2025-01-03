@@ -32,6 +32,12 @@ pub fn main() void {
         .health = 100,
         .experience = 10,
     };
+    chars[1] = Character{
+        .role = Role.bard,
+        .gold = 10,
+        .health = 100,
+        .experience = 20,
+    };
 
     // Please add "Zump the Loud" with the following properties:
     //
@@ -45,12 +51,12 @@ pub fn main() void {
 
     // Printing all RPG characters in a loop:
     for (chars, 0..) |c, num| {
-        std.debug.print("Character {} - G:{} H:{} XP:{}\n", .{
+        std.debug.print("{} Character - G:{} H:{} XP:{}\n", .{
             num + 1, c.gold, c.health, c.experience,
         });
     }
 }
-
+// nie mam pojecia jak zrobi zeby wyswietlalo role postaci poprawnie a nie 038_structs2.zi
 // If you tried running the program without adding Zump as mentioned
 // above, you get what appear to be "garbage" values. In debug mode
 // (which is the default), Zig writes the repeating pattern "10101010"

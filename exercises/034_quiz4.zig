@@ -9,15 +9,12 @@ const std = @import("std");
 
 const NumError = error{IllegalNumber};
 
-pub fn main() void {
+pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
 
-    const my_num: u32 = getNumber() catch |err| {
-        std.debug.print("error: {}\n", .{err});
-        return;
-    };
+    const my_num: u32 = try getNumber();
 
-    if (stdout.print("my_num={}\n", .{my_num}) catch |err| {}
+    try stdout.print("my_num={}\n", .{my_num});
 }
 
 // This function is obviously weird and non-functional. But you will not be changing it for this quiz.

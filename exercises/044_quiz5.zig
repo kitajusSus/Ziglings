@@ -19,11 +19,13 @@ const Elephant = struct {
 pub fn main() void {
     var elephantA = Elephant{ .letter = 'A' };
     // (Please add Elephant B here!)
+    var elephantB = Elephant{ .letter = 'B' };
     var elephantC = Elephant{ .letter = 'C' };
 
     // Link the elephants so that each tail "points" to the next elephant.
     // They make a circle: A->B->C->A...
     elephantA.tail = &elephantB;
+    elephantB.tail = &elephantC;
     // (Please link Elephant B's tail to Elephant C here!)
     elephantC.tail = &elephantA;
 
@@ -37,11 +39,11 @@ pub fn main() void {
 // If we did not "mark" the elephants as visited (by setting
 // visited=true), then this would loop infinitely!
 fn visitElephants(first_elephant: *Elephant) void {
-    var e = first_elephant;
+    var elephant = first_elephant;
 
-    while (!e.visited) {
-        std.debug.print("Elephant {u}. ", .{e.letter});
-        e.visited = true;
-        e = e.tail;
+    while (!elephant.visited) {
+        std.debug.print("Elephant {u}. ", .{elephant.letter});
+        elephant.visited = true;
+        elephant = elephant.tail;
     }
 }

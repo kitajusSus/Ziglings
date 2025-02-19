@@ -1,4 +1,3 @@
-//
 // Sometimes you know that a variable might hold a value or
 // it might not. Zig has a neat way of expressing this idea
 // called Optionals. An optional type just has a '?' like this:

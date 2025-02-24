@@ -15,7 +15,10 @@
 // with this little program?
 //
 const std = @import("std");
+const print = std.debug.print;
 
 pub fn main() void {
     std.debug.print("Hello world!\n", .{});
+    // INNA OPCJA NAPISANIA CZEGOS W TERMINALU
+    print("Hello world!\n", .{});
 }

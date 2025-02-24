@@ -8,6 +8,7 @@
 //     }
 //
 const std = @import("std");
+const pow = std.math.pow;
 
 pub fn main() void {
     std.debug.print("Powers of two: {} {} {} {}\n", .{
@@ -23,7 +24,7 @@ pub fn main() void {
 // expecting. The output type has already been specified for you.
 //
 fn twoToThe(my_number: u32) u32 {
-    return std.math.pow(u32, 2, my_number);
+    return pow(u32, 2, my_number);
     // std.math.pow(type, a, b) takes a numeric type and two
     // numbers of that type (or that can coerce to that type) and
     // returns "a to the power of b" as that same numeric type.

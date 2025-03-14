@@ -21,7 +21,7 @@ My notes on zigling and zig-book.:w
 // https://github.com/ziglang/zig/blob/4ca1f4ec2e3ae1a08295bc6ed03c235cb7700ab9/src/codegen/aarch64.zig#L24
 ```
 
-## 043
+# 043
 
 
 ```zig 
@@ -30,10 +30,10 @@ printCharacter(&glorp);
 
 ```
 
-## 044_quiz5.zig
+# 044_quiz5.zig
 
 
-## 050_no_value.zig
+# 050_no_value.zig
 What is Undefined?  
 There are 4 ways to tell ziggi that variable/const or something does not have any value. ("no value") 
 1. Str8 forward
@@ -91,5 +91,5 @@ var second_line2: ?*const [18]u8 = null;
 I added a 1 commend close to first_line2,  to show how error looks like,
 
 
-# 051_values.zig
+## 051_values.zig
 

@@ -1,4 +1,5 @@
-#Ziglings
+# Ziglings
+My notes on zigling and zig-book.:w
 ```zig
 // Zig's enums can also have methods! This comment originally asked
 // if anyone could find instances of enum methods in the wild. The

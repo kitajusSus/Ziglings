@@ -92,4 +92,84 @@ I added a 1 commend close to first_line2,  to show how error looks like,
 
 
 ## 051_values.zig
+??? computer's molten core??? wtf is this.
+
+the ziggi it saying that: 
+```zig
+const std = @import("std");
+```
+Is a structure that holds a lot of different values. I think the whole program will tell us what are those crazy bits and bytes. 
+
+**Struct is a very convenient way to deal with memory** <- thats a quote from the exercise. 
+All the values of the struct are stored in memmory, if you add size of all the particular values  you will get the size of struct as a whole.
+
+```zig
+// if the instance of the struct is const, all the values inside are const
+const Toilet = struct{
+    toilet_paper: u32 = 3,
+    toilet_paper_roll: u32 = 1,
+};
+
+const skibdi_new= Toilet{
+    .toilet_paper = 31,
+    .toilet_paper_roll = 10,
+};
+// but  you can create the instance of the struct that is not const
+var free_skibidi = Toilet{};
+    
+```
+> a function is a instruction code at a particular address. 
+**FUNCTION PARAMETERS IN  Z  I  G ARE ALWAYS IMMUTABLE**
+
+oh, struct can be written like it was a size/type ex.
+```zig 
+//its a number
+var number: u32 =3;
+var nmumber2: u32 = someother_number;
+// but with struct?
+var skib: *Toilet = &skibidi_new;
+```
+Remember Timmie that `*Toilet` is a pointer to the struct, and `&skibidi_new` is a reference to thevalue.
+Values inside the function are initated as the const. 
+
+```zig
+fn function(arg: u32) void{
+    arg =3; //error
+}
+```
+but... 
+We will now look at different ways of assigning existing variables to new ones. When do we pass thesame object in memory? When do we make a copy?
+```zig
+var glorp_access1: Character = glorp;
+glorp_access1.gold = 111;
+``````
+Above creates a copy. You can see it by changing a value after assigning to new name. The two variables will have different values if you change the value for one of them.
+```zig
+var glorp_access2: *Character = &glorp;
+glorp_access2.gold = 222;
+```
+---
+Now we created a proper link to an object. This variable is nothing more than just the original glorp in disguise. If you now change the value of some field, it will be changed for the original glorp as well.
+```zig
+const glorp_access3: *Character = &glorp;
+glorp_access3.gold = 222;
+```
+---
+Now we get back to the pointer differences we've talked when doing pointer exercises. const pointer variable means that we can't change what the pointer variable is pointing at, but we can still change the values of the variable we point at.
+```zig
+const glorp_access4: *const Character = &glorp;
+glorp_access4 = 111;
+```
+> part of this code above was copied from -> https://github.com/Laz4rz/ziglings/README
+
+**Answer**
+```zig
+//in leverUp we needed to change arguments to a values. 
+levelUp(&glorp, reward_xp); //original wal levelUp(glorp, reward_xp);
+//later on I needed to see that the argument `character_access` is imported as a const, I needed a pointer to check sum. 
+fn levelUp(const character_access: *Character, xp: u32) void{
+
+};
+```
+
 

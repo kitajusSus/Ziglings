@@ -67,7 +67,7 @@ const Err = error{Cthulhu};
 pub fn main() void {
     var first_line1: *const [16]u8 = undefined;
     first_line1 = "That is not dead";
-
+    //first_line1 = "1234567891231234567";
     var first_line2: Err!*const [21]u8 = Err.Cthulhu;
     //const first_line2: Err!*const [21]u8 = Err.Cthulhu;
     first_line2 = "which can eternal lie";

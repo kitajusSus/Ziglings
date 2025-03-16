@@ -171,5 +171,48 @@ fn levelUp(const character_access: *Character, xp: u32) void{
 
 };
 ```
+# 052_slices.zig
+Alright, Zigers, let's talk about arrays and how they can be moved around. Remember that function definition from quiz 3? 
+Yeah, the one that only worked with arrays of exactly 4 u16s? 
+That's the core issue with arrays – their size is baked right into their type. Once you declare an array like: 
+```zig
+var digits = [10]u8{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+```
+, it's stuck being an array of 10 u8s forever. Not super flexible, right?
 
+Enter slices. Think of slices as a way to peek into an existing array without being tied down by its full size. They're like dynamic windows into an array(you come inside, see what you want and  go home), letting you specify a starting point and a length.
 
+Let's break down those examples:
+```zig
+const foo = digits[0..1];
+```
+This creates a slice that starts at the very first element (index 0) and includes elements up to, but not including, index 1. So, `foo` will contain just 0.
+```zig
+const bar = digits[3..9]; 
+```
+This slice starts at index 3 and goes up to (but not including) index 9. So, bar will hold `3, 4, 5, 6, 7, 8`
+```zig
+const skibidi = digits[5..9];
+```
+Similar to `bar`, this starts at index 5 and goes up to index 8. `skibidi` will contain 5, 6, 7, 8.
+```zig
+const all = digits[0..]; 
+```
+This is a cool shortcut. By leaving off the end index, you're telling Zig, "Give me everything from the starting index to the end of the array." So, all will contain all the `digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9`.
+
+The really neat thing is the type of these slices. If you have an array of u8's, a slice of that array will have the type `[]u8`. 
+>Noticed the empty brackets? Of course you did smart fella. I love you Timmie
+
+That signifies that the length of the slice isn't fixed at compile time. It can vary depending on where you're slicing from and how much you're slicing.
+
+So, slices are a game-changer when you want to work with portions of arrays without being constrained by their full, static size.
+They make passing data around and writing flexible functions much, much easier.
+You'll be seeing slices a lot in Zig, so getting comfortable with them is key!
+
+**Answer** nothing special, just remember that `cards[0..4]` will give you A4K8 because they are indexed inside like `0,1,2,3,4` and `cards[0..4]` stop just before element with index 4. (de facto 5th element)
+```bash
+zig run exercises/052_slices.zig                                                                         
+Hand1: A 4 K 8 
+Hand2: 5 2 Q J 
+```
+your output should be like this. 

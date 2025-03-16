@@ -160,7 +160,7 @@ Now we get back to the pointer differences we've talked when doing pointer exerc
 const glorp_access4: *const Character = &glorp;
 glorp_access4 = 111;
 ```
-> part of this code above was copied from -> https://github.com/Laz4rz/ziglings/README.md
+> part of this code above was copied from -> https://github.com/Laz4rz/ziglings
 
 **Answer**
 ```zig

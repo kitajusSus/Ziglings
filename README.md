@@ -215,4 +215,40 @@ zig run exercises/052_slices.zig
 Hand1: A 4 K 8 
 Hand2: 5 2 Q J 
 ```
-your output should be like this. 
+your output should be like this.
+
+## 053_slices2.zig
+Welcome, todays Subject is: **Slicing... again**, Are you interested in slicing of a string? 
+You get to the proper place lad. 
+1. String is just an array of characters. (string)
+2. Timmie, you need to remember that in *Zig*, strings literals, are immutable (you cant change them). {const}
+3. Thats why if you want to take slice of a string, you need to use `[]const u8` type,  because output needs to be the same type as input.
+
+If you forgot about this you will get, 
+```bash
+exercises/053_slices2.zig:22:34: error: expected type '[]u8', found '*const [16:0]u8'
+    const base3: []u8 = scrambled[32..];
+                        ~~~~~~~~~^~~~~~
+```
+I added simple Error, when word in justice1 == "for"
+
+```zig
+fn printPhrase(part1: []const u8, part2: []const u8, part3: []const u8) !void {
+    const stdout = std.io.getStdOut().writer();
+
+    if (std.mem.eql(u8, part1, "for")) {
+        return error.Word_For;
+    } else return try stdout.print("'{s} {s} {s}.' ", .{ part1, part2, part3 });
+}
+
+const MyError = error{Word_For};
+```
+```bash
+/Ziglings/exercises/053_slices2.zig:37:9: 0x10de1f8 in printPhrase (053_slices2)
+        return error.Word_For;
+
+/Ziglings/exercises/053_slices2.zig:28:5: 0x10de54f in main (053_slices2)
+    try printPhrase(justice1, justice2, justice3);
+```
+
+## 054_slices3.zig

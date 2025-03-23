@@ -251,4 +251,7 @@ const MyError = error{Word_For};
     try printPhrase(justice1, justice2, justice3);
 ```
 
-## 054_slices3.zig
+## 054_manypointers.zig
+Okay, here we are Timmie. 
+Todays subject is: **Pointers to Pointers to Pointers**. 
+

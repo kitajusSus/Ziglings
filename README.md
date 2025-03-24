@@ -55,7 +55,7 @@ Holds value which is saying, `no value`
 Imagine that something went wrong and you are not able to give it value. 
 You got 2 options, 
 a) you can ignore it and let your program crash 
-b). -> [tests/test_050_error.zig](test_050_error.zig)
+b). -> [tests/test_050_error.zig](tests/test_050_error.zig)
 ```zig
 var toilet: u8!MyError = SomeError;
 ```

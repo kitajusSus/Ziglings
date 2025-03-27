@@ -55,7 +55,7 @@ Holds value which is saying, `no value`
 Imagine that something went wrong and you are not able to give it value. 
 You got 2 options, 
 a) you can ignore it and let your program crash 
-b). -> [tests/test_050_error.zig](tests/test_050_error.zig)
+b). -> [tests/test_050_error.zig](test_050_error.zig)
 ```zig
 var toilet: u8!MyError = SomeError;
 ```
@@ -252,9 +252,84 @@ const MyError = error{Word_For};
 ```
 
 ## 054_manypointers.zig
-<<<<<<< HEAD
-=======
-Okay, here we are Timmie. 
-Todays subject is: **Pointers to Pointers to Pointers**. 
->>>>>>> 13cd4cf44d515e170a0d9bacaefaa019e910e5b6
+*Pointers* are a way to reference a value in memory. I can do them to multiple items without using slicing. 
+> good to hear fr fr 
+```zig
+//examples from code
+var foo: [4]u8 = [4]u8{ 1, 2, 3, 4 };
+var foo_slice: []u8 = foo[0..]; //slice has a known length, 
+var foo_ptr: [*]u8 = &foo; // pointer doesn't, 
+//Its your duty to keep track 
+//of the number of u8 foo_ptr points to
+var foo_slice_from_ptr: []u8 = foo_ptr[0..4];
+```
+### Important Concepts from this: 
+#### **1. Arrays `[N]arr`** :
+*   **Definition:** An array in Zig has a **fixed size known at compile time**. The type `[N]T` represents an array of `N` elements of type `T`.
+*   **Example:** `var foo: [4]u8 = [4]u8{ 1, 2, 3, 4 };` defines an array named `foo` that holds exactly 4 `u8` values.
+*   **Nature:** Arrays often behave like value types. When assigned or passed by value, the entire content might be copied (depending on context and size). The size `N` is part of the array's type.
+```zig
+    const std = @import("std");
+
+    pub fn main() void {
+        // Define an array of 3 integers
+        var numbers: [3]i32 = .{ 10, 20, 30 };
+
+        // Access an element
+        std.debug.print("Second number: {d}\n", .{numbers[1]}); // Output: Second number: 20
+
+        // The size is fixed and known at compile time
+        std.debug.print("Array size: {d}\n", .{numbers.len}); // Output: Array size: 3
+
+        // Attempting to resize or assign different size array will cause compile error
+        // numbers = .{ 1, 2, 3, 4 }; // COMPILE ERROR: expected type '[3]i32', found '.{ 1, 2, 3, 4 }'
+    }
+```
+#### **2. Slices `[]arr`** : (as you can see there is no N)
+-  **Definition:** A slice is a **view** or a *section* into an array(memory). It doesn't have a fixed size known at compile time. The type `[]T` represents a slice of elements of type `T`. But is stored with the slice and is know at **RUNTIME** 
+-    **Example:** `var foo_slice: []u8 = foo[0..];` creates a slice `foo_slice` that points to the beginning of the `foo` array and knows its length is 4. Slices can represent a part of an array too: `foo[1..3]` would be a slice of length 2 containing `{ 2, 3 }`.
+-   **Key Feature:** Slices **always know their length**. This makes them safer to work with for iteration and bounds checking. They are often used for function arguments that accept sequences of unknown length at compile time.
+
+**Example** : 
+```zig
+    const std = @import("std");
+
+    pub fn main() void {
+        var data: [5]u8 = .{ 'Z', 'i', 'g', '!', '!' };
+
+        // Create a slice covering the whole array
+        var full_slice: []u8 = data[0..];
+        std.debug.print("Full slice length: {d}\n", .{full_slice.len}); // Output: Full slice length: 5
+
+        // Create a slice covering part of the array
+        var partial_slice: []u8 = data[1..3]; // Includes elements at index 1 and 2 ('i', 'g')
+        std.debug.print("Partial slice length: {d}\n", .{partial_slice.len}); // Output: Partial slice length: 2
+        std.debug.print("Partial slice content: {s}\n", .{partial_slice}); // Output: Partial slice content: ig
+
+        // Modify data through the slice (slices point to the original data)
+        partial_slice[0] = 'I';
+        std.debug.print("Original data modified: {s}\n", .{data[0..]}); // Output: Original data modified: ZIg!!
+    }
+```
+
+
+
+
+
+
+```bash
+//     FREE ZIG POINTER CHEATSHEET! (Using u8 as the example type.)
+//   +---------------+----------------------------------------------+
+//   |  u8           |  one u8                                      |
+//   |  *u8          |  pointer to one u8                           |
+//   |  [2]u8        |  two u8s                                     |
+//   |  [*]u8        |  pointer to unknown number of u8s            |
+//   |  [*]const u8  |  pointer to unknown number of immutable u8s  |
+//   |  *[2]u8       |  pointer to an array of 2 u8s                |
+//   |  *const [2]u8 |  pointer to an immutable array of 2 u8s      |
+//   |  []u8         |  slice of u8s                                |
+//   |  []const u8   |  slice of immutable u8s                      |
+//   +---------------+----------------------------------------------+
+```
+
 

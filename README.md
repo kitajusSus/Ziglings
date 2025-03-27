@@ -311,7 +311,7 @@ var foo_slice_from_ptr: []u8 = foo_ptr[0..4];
         std.debug.print("Original data modified: {s}\n", .{data[0..]}); // Output: Original data modified: ZIg!!
     }
 ```
-### 3. Many-Item Pointers (`[*]T`)
+#### 3. Many-Item Pointers (`[*]T`)
 
 *   **Definition:** A many-item pointer (`[*]T`) is a **pointer to one or more items** of type `T`, but **it does not store the length**. It's essentially just a memory address pointing to the start of a sequence.
 *   **Analogy:** This is similar to how pointers often work in C/C++, where you have a pointer to the first element but need a separate mechanism (like a null terminator or an explicit length variable) to know where the sequence ends.
@@ -340,14 +340,15 @@ var foo_slice_from_ptr: []u8 = foo_ptr[0..4];
         var values_slice: []f32 = values_ptr[0..len];
         std.debug.print("Slice created from ptr length: {d}\n", .{values_slice.len}); // Output: Slice created from ptr length: 4
     }
-### 4. Pointers to Arrays (`*[N]T`)
+```
+#### 4. Pointers to Arrays (`*[N]T`)
 
 *   **Definition:** This is a pointer to a *specific, fixed-size array type*. The type `*[N]T` is a pointer to *one* instance of `[N]T`.
 *   **Example:** `var foo_ptr_to_array: *[4]u8 = &foo;`
 *   **Difference from `[*]T`:** This pointer type *knows* it points to an array of exactly `N` items because `N` is part of the type itself (`*[N]T`). You can get the size by dereferencing the pointer and accessing the `.len` of the underlying array type. `[*]T` loses this compile-time size information.
 
 *   **Code Snippet:**
-    ```zig
+```zig
     const std = @import("std");
 
     pub fn main() void {
@@ -366,8 +367,8 @@ var foo_slice_from_ptr: []u8 = foo_ptr[0..4];
         matrix_ptr.*[1][1] = 42;
         std.debug.print("Modified element [1][1]: {d}\n", .{matrix_data[1][1]}); // Output: Modified element [1][1]: 42
     }
-    ```
-
+```
+**Free cheatsheet!!!!**
 ```bash
 //     FREE ZIG POINTER CHEATSHEET! (Using u8 as the example type.)
 //   +---------------+----------------------------------------------+

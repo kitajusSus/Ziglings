@@ -384,4 +384,75 @@ var foo_slice_from_ptr: []u8 = foo_ptr[0..4];
 //   +---------------+----------------------------------------------+
 ```
 
+It wasnt that difficult, was it? 
+
+## 055_unions.zig
+The Big Zig told me few things about unions. Sounds cool. But What is this??
+
+```zig
+// imagine a struct like this which can hold either a u8 or a u16 or something else. 
+const MyUnion = union {
+    x: u8,
+    y: u16,
+    z: f32,
+    a: bool,
+    //etc. 
+}
+```
+> Unions are a way to store different types of data in the same memory location.
+Realy good for ecolodgy of memory. You can reuse the same memory shelf. 
+```zig
+ var some_union: MyUnion{ .x = 42 };
+some_union.y = 1234; // gives error
+some_union = MyUnion{ .y = 1234 }; // works
+
+some_union.a = True; // gives error
+// How to make it work??
+```
+Its important to remember that you can only access the field that was last written to. 
+
+## 056_unions2.zig
+[exercise link](exercises/056_unions2.zig)
+First look at the code. 
+```zig
+const BigEnumStruct = enum{small, medium, large};
+
+const MyUnion = union {
+    x: u8,
+    y: u16,
+    z: f32,
+};
+
+var skibidi = MyUnion{ .x = 42 };
+```
+By using swtich state  I can change/act on my taged union  `skibidi`. For example like this, 
+
+```zig 
+switch (skibidi) {
+    .x => |argument| do_something_function(argument),
+    .y => |argument_2| function2(argument_2),
+    .z => |argument_3| function3(argument_3) ,
+}
+```
+
+> Optional Values are basically `null unions`, and  Erros are using "error union types". 
+
+And it's possible to create own unions depends on the needs: 
+```zig
+const MyUnion = union {
+    x: u8,
+    y: u16,
+    z: f32,
+    a: bool,
+    b: BigEnumStruct,
+    function: void,
+};
+```
+
+## 057_unions3.zig
+[exercise link](exercises/057_unions3.zig)
+Tagged unions are fun (probably).
+
+
+```zig
 

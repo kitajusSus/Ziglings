@@ -15,7 +15,8 @@
 //
 const std = @import("std");
 
-const Insect = union(InsectStat) {
+// Instead of using InsectStat, we just write 'enum' here
+const Insect = union(enum) {
     flowers_visited: u16,
     still_alive: bool,
 };
@@ -38,7 +39,6 @@ fn printInsect(insect: Insect) void {
         .flowers_visited => |f| std.debug.print("Bee visited {} flowers. ", .{f}),
     }
 }
-
 // Inferred enums are neat, representing the tip of the iceberg
 // in the relationship between enums and unions. You can actually
 // coerce a union TO an enum (which gives you the active field

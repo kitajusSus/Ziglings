@@ -452,7 +452,29 @@ const MyUnion = union {
 ## 057_unions3.zig
 [exercise link](exercises/057_unions3.zig)
 Tagged unions are fun (probably).
+damn, instead of creating enums I can just use `enum` and `union` together. toUse this as strucs or something to store data
 
-
+I can create a union like this:
 ```zig
+const Insect = union(enum) {
+    flowers_visited: u16,
+    still_alive: bool,
+};
+```
+Instead of having to write it the longer way with separate enum definition (which I was doing before):
+```zig 
+const InsectStat = enum {
+    flowers_visited,
+    still_alive,
+};
 
+const Insect = union(InsectStat) {
+    flowers_visited: u16,
+    still_alive: bool,
+};
+```
+Cool Things I Discovered 🌟
+- I can use union(enum) to make my code shorter
+- It automatically creates the enum types from the union fields
+- It's really useful for making different types of data work together (like my ants and bees example!)
+**Note to self: This is a really neat way to handle different types of data in one structure!**

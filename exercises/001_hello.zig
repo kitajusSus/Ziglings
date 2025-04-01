@@ -20,5 +20,5 @@ const std = @import("std");
 pub fn main() void {
     std.debug.print("Hello world!\n", .{});
     // INNA OPCJA NAPISANIA CZEGOS W TERMINALU
-    print("Hello world!\n", .{});
+    //print("Hello world!\n", .{});
 }

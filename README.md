@@ -478,3 +478,30 @@ Cool Things I Discovered 🌟
 - It automatically creates the enum types from the union fields
 - It's really useful for making different types of data work together (like my ants and bees example!)
 **Note to self: This is a really neat way to handle different types of data in one structure!**
+
+
+## 058_QUIZ.zig
+[exercise link](exercises/058_quiz7.zig)
+
+Damn, I was like 30 minutes to do some zigging, you know. `git commit ` and see you later. Wtf is this
+
+```zig
+// quote from the exercise
+//
+//                          u8  single item
+//                         *u8  single-item pointer
+//                        []u8  slice (size known at runtime)
+//                       [5]u8  array of 5 u8s
+//                       [*]u8  many-item pointer (zero or more)
+//                 enum {a, b}  set of unique values a and b
+//                error {e, f}  set of unique error values e and f
+//      struct {y: u8, z: i32}  group of values y and z
+// union(enum) {a: u8, b: i32}  single value either u8 or i32
+```
+
+
+
+```zig
+
+
+```

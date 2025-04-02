@@ -27,7 +27,7 @@ const Projectile = struct {
 pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
 
-    var proj = Projectile.start(20.0, 15.0); // prędkość początkowa 20 m/s, kąt 45 stopni
+    var proj = Projectile.start(100.0, 1.0); // prędkość początkowa 20 m/s, kąt 45 stopni
     const dt: f32 = 0.1;
 
     while (proj.y >= 0.0) {

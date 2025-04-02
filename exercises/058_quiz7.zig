@@ -90,7 +90,7 @@ var f = Place{ .name = "Fox Pond" };
 // this value because we don't actually use it in our program once
 // it's compiled! (Don't worry if this doesn't make sense yet.)
 const place_count = 6;
-
+// oj bratku proste ze nie robi sensu
 // Now let's create all of the paths between sites. A path goes from
 // one place to another and has a distance.
 const Path = struct {

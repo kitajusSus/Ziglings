@@ -498,10 +498,50 @@ Damn, I was like 30 minutes to do some zigging, you know. `git commit ` and see 
 //      struct {y: u8, z: i32}  group of values y and z
 // union(enum) {a: u8, b: i32}  single value either u8 or i32
 ```
+I'm just going to show you how things were(?) done by me. 
+```zig
+    // This is a little helper function to print the two different
+    // types of item correctly.
+    fn printMe(self: TripItem) void {
+        switch (self) {
+            // Oops! The hermit forgot how to capture the union values
+            // in a switch statement. Please capture each value as
+            // 'p' so the print statements work!
+            .place => |p| print("{s}", .{p.name}), // It was needed to add a |p|
+            .path => |p| print("--{}->", .{p.dist}),
+        }
+    }
+};
+```
+```zig
+            if (place == entry.*.?.place) return &entry.*.?;
+            // Try to make your answer this long:__________;
+        }
+        return null;
+    }
+```
 
+Last: In function get trip to change `void` -> `!void`
 
+## 059_integers.zig
+[ex]()
+skip that
 
 ```zig
-
-
+//
+// Zig lets you express integer literals in several convenient
+// formats. These are all the same value:
+//
+//     const a1: u8 = 65;          // decimal
+//     const a2: u8 = 0x41;        // hexadecimal
+//     const a3: u8 = 0o101;       // octal
+//     const a4: u8 = 0b1000001;   // binary
+//     const a5: u8 = 'A';         // ASCII code point literal
+//     const a6: u16 = '\u{0041}'; // Unicode code points can take up to 21 bits
+//
+// You can also place underscores in numbers to aid readability:
+//
+//     const t1: u32 = 14_689_520 // Ford Model T sales 1909-1927
+//     const t2: u32 = 0xE0_24_F0 // same, in hex pairs
+//
 ```

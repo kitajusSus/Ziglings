@@ -44,11 +44,16 @@ pub fn main() void {
     // We'll convert this weight from pound to kilograms at a
     // conversion of 0.453592kg to the pound.
     const shuttle_weight: f16 = 0.453592 * 4480e6;
+    const skibidi: f32 = 0.453592 * 4480e6; // 
+    const toilet: f64 = 0.453592 * 4480e6; 
+
 
     // By default, float values are formatted in scientific
     // notation. Try experimenting with '{d}' and '{d:.3}' to see
     // how decimal formatting works.
-    print("Shuttle liftoff weight: {d:.0}kg\n", .{shuttle_weight});
+    print("Shuttle liftoff weight(float 16): {d:.3} kg\n", .{shuttle_weight});
+    print("float 32: {d:.3} kg \n", .{skibidi});
+    print("float 64: {d} kg \n", .{toilet});
 }
 
 // Floating further:

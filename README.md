@@ -524,7 +524,7 @@ I'm just going to show you how things were(?) done by me.
 Last: In function get trip to change `void` -> `!void`
 
 ## 059_integers.zig
-[ex]()
+[ex](exercise/059_integers.zig)
 skip that
 
 ```zig
@@ -545,3 +545,47 @@ skip that
 //     const t2: u32 = 0xE0_24_F0 // same, in hex pairs
 //
 ```
+
+In next one(060_floats.zig) I found new notes 
+
+> Zig has support for IEEE-754 floating-point numbers in these
+ specific sizes: f16, f32, f64, f80, and f128. Floating point
+ literals may be written in the same ways as integers but also
+ in scientific notation:
+
+- `const a1: f32 = 1200;`       //    1,200
+- `const a2: f32 = 1.2e+3;`     //    1,200
+- `const b1: f32 = -500_000.0;` // -500,000
+- `const b2: f32 = -5.0e+5;`    // -500,000
+
+## 061_coertion. 
+Zig's type coercion allows for automatic conversion between certain types, making the code cleaner and more concise.  Here's a breakdown of the key rules:
+
+**Core Principles:**
+
+* **Restriction:** Types can always be coerced to a *more* restrictive type (e.g., mutable to immutable).
+* **Expansion:** Numeric types can be coerced to *larger* types (e.g., `u8` to `u16`, `f32` to `f64`).
+
+**Key Coercion Rules:**
+
+1. **Pointer to Array:** Single-item pointers to arrays coerce to slices (`[]T`) and many-item pointers (`[*]T`).
+2. **Single-Item to Array Pointer:** Single-item pointers (`*T`) can coerce to pointers to a one-element array (`*[1]T`). This allows treating a single value as if it were in an array.
+3. **Optional Types:** Values and `null` coerce to optional types (`?T`).
+4. **Error Unions:** Values and errors coerce to error unions (`Error!T`).
+5. **Undefined:** `undefined` coerces to any type. This is essential for uninitialized variables.
+
+
+**Example: Coercing a Pointer**
+
+Let's say you have `var x: u8 = 10;` and `var ptr: *u8 = &x;`.
+
+* `ptr` can coerce to `*const u8` (mutable to immutable).
+* `ptr` can coerce to `*[1]u8` (single-item pointer to array pointer).
+* `ptr` can coerce to `?*const [1]u8` (optional pointer to a const array pointer).
+
+**Important Considerations:**
+
+* Coercion must not lead to data loss. You cannot coerce a `u32` to a `u8` directly (explicit casting needed).
+* Understanding coercion rules is crucial for writing safe and efficient Zig code. The compiler will help by enforcing these rules and reporting errors when coercion is not possible.
+
+## 

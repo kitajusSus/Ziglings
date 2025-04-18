@@ -675,3 +675,150 @@ Let's say you have `var x: u8 = 10;` and `var ptr: *u8 = &x;`.
 [exercise link](exercises/062_loop_expressions.zig)
 
 Simple example of using loop expressions in Zig. Loop expressions are a powerful feature that allows you to iterate over collections and perform operations in a concise manner.
+
+Just add else statement on the end
+
+## 063_labels.zig
+
+[exercise063 link](exercises/063_labels.zig)
+
+Zig utilizes labels primarily for fine-grained control over flow in loops and blocks. They allow you to specify exactly which loop or block a `break` or `continue` statement should affect, especially in nested situations.
+
+Labels can be attached to `while` and `for` loops.
+
+- **`break :label;`**: Exits the specific loop identified by `label`, even from within nested loops.
+- **`break :label value;`**: Exits the specific loop identified by `label` _and_ makes the loop expression evaluate to `value`. (Useful when the loop is used as an expression).
+- **`continue :label;`**: Skips the rest of the current iteration and proceeds to the next iteration of the specific loop identified by `label`.
+
+```zig
+const std = @import("std");
+
+pub fn main() !void {
+    var i: u3 = 0;
+    outer_loop: while (i < 5) : (i += 1) {
+        std.debug.print("Outer: {d}\n", .{i});
+        var j: u3 = 0;
+        inner_loop: while (j < 5) : (j += 1) {
+            std.debug.print("  Inner: {d}\n", .{j});
+            if (i == 2 and j == 1) {
+                std.debug.print("  -> Breaking outer_loop from inner!\n", .{});
+                break :outer_loop; // Exit the loop labeled 'outer_loop'
+            }
+            if (i == 0 and j == 3) {
+                // This would only break the inner_loop if uncommented
+                // break :inner_loop;
+            }
+        }
+        // This line is skipped when break :outer_loop is hit
+         std.debug.print("End of outer iteration {d}\n", .{i});
+    }
+    std.debug.print("After loops.\n", .{});
+    // Output stops after "Outer: 2", "  Inner: 0", "  Inner: 1", "  -> Breaking outer_loop from inner!"
+}
+```
+
+Labels can also be applied to regular blocks (`{ ... }`). This turns the block into an _expression_ that can be exited early using `break :label value;`.
+
+- **`break :label value;`**: Immediately exits the block identified by `label`, and the entire block expression evaluates to `value`.
+
+**Example:** Using a labeled block as an expression with early exit.
+
+```zig
+const std = @import("std");
+
+pub fn main() !void {
+    const input: ?u32 = 10; // Try changing to null, 0, or 101
+
+    const result_message = check_value: {
+        const value = input orelse {
+            // If input is null, exit the block early
+            break :check_value "Input is missing.";
+        };
+
+        if (value == 0) {
+            break :check_value "Input is zero.";
+        } else if (value > 100) {
+            break :check_value "Input is too large.";
+        }
+
+        // If we reach here, the input is valid and within range
+        // The final expression of the block is its value if no break occurred
+        // but using break :label is often clearer for the "success" case too.
+        break :check_value "Input is valid.";
+    };
+
+    std.debug.print("Check result: {s}\n", .{result_message});
+    // With input = 10,  Output: Check result: Input is valid.
+    // With input = null, Output: Check result: Input is missing.
+    // With input = 0,   Output: Check result: Input is zero.
+    // With input = 101, Output: Check result: Input is too large.
+}
+```
+
+Block labels are particularly useful for complex initializations or validation logic where you might need to return a specific result from multiple points within the block.
+
+## 064_builtins.zig
+
+[exercise link](exercises/064_builtins.zig)
+
+Zig provides a set of built-in functions that can be used to perform various operations. These built-ins are available in the `@` namespace and can be used without any imports.
+Some of the most commonly used built-ins include:
+
+- `@intToPtr`: Converts an integer to a pointer type.
+- `@ptrToInt`: Converts a pointer to an integer type.
+- `@sizeOf`: Returns the size of a type in bytes.
+- `@alignOf`: Returns the alignment of a type in bytes.
+- `@typeInfo`: Returns information about a type, including its size, alignment, and whether it is a pointer or an array.
+
+Juz read the exercise I added the checking `skibidi` to see something
+
+## 065_buildins2.zig
+
+Okay Timmie, let's look at this Zig code like it's about building blocks and asking questions!
+
+Imagine you have a special blueprint for a toy box called `Narcissus`.
+
+1.  **The `Narcissus` Box Blueprint:**
+
+    - This blueprint says the box should have two spots inside called `me` and `myself`. These spots are special because they should hold instructions pointing _back_ to the very same box! Like looking in a mirror.
+    - It also has a spot called `echo`, but this spot is like an empty space, it doesn't hold anything real (that's what `void` means here - nothing!).
+    - Inside the blueprint, there's a little helper instruction called `fetchTheMostBeautifulType`.
+
+2.  **Building the Box:**
+
+    - In the `main` part, we build _one_ actual toy box using the `Narcissus` blueprint: `var narcissus: Narcissus = Narcissus{};`.
+    - Uh oh! The spots `me` and `myself` are empty! The code fixes this by putting instructions in them that point back to our `narcissus` box:
+      - `narcissus.me = &narcissus;` (Put a pointer to `narcissus` in the `me` spot)
+      - `narcissus.myself = &narcissus;` (Put a pointer to `narcissus` in the `myself` spot)
+
+3.  **Asking Magic Questions (The Built-ins!):**
+
+    - **`@TypeOf(...)` - What kind of toy is this?**
+      Imagine you show the computer your `narcissus` box, the instruction in `me` (which points to the box), and the instruction in `myself` (which also points to the box).
+      `@TypeOf(narcissus, narcissus.me.*, narcissus.myself.*)` asks the computer: "Hey, if you look at all these things, what _kind_ of toy are they all related to?"
+      The computer is smart and says: "They are all related to the `Narcissus` blueprint!" So, `Type1` becomes the _type_ `Narcissus`.
+
+    - **`@This()` - What blueprint am I inside?**
+      The `fetchTheMostBeautifulType` helper inside the blueprint uses `@This()`. This is like the helper asking itself: "What's the name of the blueprint I am written inside of?"
+      The answer is: "You are inside the `Narcissus` blueprint!"
+      _Tiny tricky part:_ The code calls `narcissus.fetchTheMostBeautifulType()`. It's asking the _actual box_ to run the helper. The helper still knows it belongs to the `Narcissus` blueprint. So, `Type2` also becomes the _type_ `Narcissus`.
+
+    - **`@typeInfo(...)` - Tell me about this blueprint!**
+      This is like asking the computer to be a detective and look _really closely_ at the `Narcissus` blueprint (not the actual box, but the _idea_ of the box).
+      `@typeInfo(Narcissus)` asks: "Tell me all the parts listed in the `Narcissus` blueprint!"
+      The computer gives back a list (`fields`) saying: "Okay, the blueprint has a part named `me`, a part named `myself`, and a part named `echo`."
+
+4.  **Checking the Parts:**
+
+    - The code then looks at the list of parts the detective (`@typeInfo`) found.
+    - For each part (`me`, `myself`, `echo`), it checks: "Is this part an empty space (`void`)?"
+    - `if (fields[0].type != void)`: Is the first part (`me`) NOT an empty space? Yes! So print "me".
+    - `if (fields[1].type != void)`: Is the second part (`myself`) NOT an empty space? Yes! So print "myself".
+    - `if (fields[2].type != void)`: Is the third part (`echo`) NOT an empty space? No, it _is_ an empty space (`void`)! So, _don't_ print "echo".
+
+5.  **`maximumNarcissism` Helper:**
+    - Sometimes the computer gives a long name like `"filename.Narcissus"`. This little helper function just cleans it up and gives you back the main part, `"Narcissus"`. It makes the final printout look nicer.
+
+**So, Timmie, what does the code do?**
+
+It makes a `Narcissus` box that points to itself. Then it uses magic Zig questions (`@TypeOf`, `@This`, `@typeInfo`) to learn about the _type_ of the box (`Narcissus`) and the _parts_ inside its blueprint (`me`, `myself`, `echo`). Finally, it prints the important parts (`me`, `myself`) but skips the empty one (`echo`). It's all about looking at things and asking questions about what they are and what they're made of!

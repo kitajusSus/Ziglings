@@ -63,10 +63,10 @@ pub fn main() void {
     //
     // If there was no overflow at all while adding 5 to a, what value would
     // 'my_result' hold? Write the answer in into 'expected_result'.
-    const expected_result: u8 = ???;
+    const expected_result: u8 = @addWithOverflow(a, 5)[0];
     print(". Without overflow: {b:0>8}. ", .{expected_result});
-
-    print("Furthermore, ", .{});
+    const skibidi: u8 = expected_result + a;
+    print("Furthermore, {}, <--jakaś liczba  ", .{skibidi});
 
     // Here's a fun one:
     //
@@ -78,6 +78,6 @@ pub fn main() void {
     // Now it's your turn. See if you can fix this attempt to use
     // this builtin to reverse the bits of a u8 integer.
     const input: u8 = 0b11110000;
-    const tupni: u8 = @bitReverse(input, tupni);
+    const tupni: u8 = @bitReverse(input);
     print("{b:0>8} backwards is {b:0>8}.\n", .{ input, tupni });
 }

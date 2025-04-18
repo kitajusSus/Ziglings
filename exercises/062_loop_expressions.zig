@@ -32,7 +32,6 @@
 // program.
 //
 const print = @import("std").debug.print;
-
 pub fn main() void {
     const langs: [6][]const u8 = .{
         "Erlang",
@@ -47,7 +46,7 @@ pub fn main() void {
     // return it from the for loop.
     const current_lang: ?[]const u8 = for (langs) |lang| {
         if (lang.len == 3) break lang;
-    };
+    } else null;
 
     if (current_lang) |cl| {
         print("Current language: {s}\n", .{cl});

@@ -18,7 +18,7 @@ const std = @import("std");
 
 const MyNumberError = error{TooSmall};
 
-pub fn main() {
+pub fn main() !void  {
     var my_number: MyNumberError!u16 = 5;
     // wykrzyknik sprawia ze my_number moze byc albo u16 albo MyNumberError  czyli albo bedzie cyferka albo bedzie bledem
 

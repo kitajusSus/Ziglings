@@ -21,8 +21,8 @@ const MyNumberError = error{
 pub fn main() void {
     // The "catch 0" below is a temporary hack to deal with
     // makeJustRight()'s returned error union (for now).
-    const a: u32 = makeJustRight(5) catch 0;
-    const b: u32 = makeJustRight(66) catch 0;
+    const a: u32 = makeJustRight(44) catch 0;
+    const b: u32 = makeJustRight(14) catch 0;
     const c: u32 = makeJustRight(4) catch 0;
 
     std.debug.print("a={}, b={}, c={}\n", .{ a, b, c });
@@ -45,7 +45,7 @@ fn makeJustRight(n: u32) MyNumberError!u32 {
 fn fixTooBig(n: u32) MyNumberError!u32 {
     return fixTooSmall(n) catch |err| {
         if (err == MyNumberError.TooBig) {
-            return 0;
+            return 20;
         }
 
         return err;
@@ -61,7 +61,7 @@ fn fixTooSmall(n: u32) MyNumberError!u32 {
     // Otherwise, we return the u32 number.
     return detectProblems(n) catch |err| {
         if (err == MyNumberError.TooSmall) {
-            return 1;
+            return 10;
         }
         return err;
     };

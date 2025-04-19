@@ -63,10 +63,10 @@ pub fn main() void {
     //
     // If there was no overflow at all while adding 5 to a, what value would
     // 'my_result' hold? Write the answer in into 'expected_result'.
-    const expected_result: u8 = @addWithOverflow(a, 5)[0];
+    const expected_result: u8 = 0b00010010;
     print(". Without overflow: {b:0>8}. ", .{expected_result});
-    const skibidi: u8 = expected_result + a;
-    print("Furthermore, {}, <--jakaś liczba  ", .{skibidi});
+    //const skibidi: u8 = expected_result + a;
+    print("Furthermore, ", .{});
 
     // Here's a fun one:
     //

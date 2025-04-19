@@ -75,6 +75,6 @@ pub fn main() void {
 
     // When it's right, this will work:
     print("Letter: {u}\n", .{my_letter.?.*[0]});
-    letter = 'B';
-    print("Letter: {u}\n", .{my_letter.?.*[0]});
+    //letter = 'B';
+    //print("Letter: {u}\n", .{my_letter.?.*[0]});
 }

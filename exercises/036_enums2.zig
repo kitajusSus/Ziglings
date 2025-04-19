@@ -53,7 +53,7 @@ pub fn main() void {
         \\<p>
         \\  <span style="color: #{x:0>6}">Red</span>
         \\  <span style="color: #{x:0>6}">Green</span>
-        \\  <span style="color: #{}">Blue</span>
+        \\  <span style="color: #{x:0>6}">Blue</span>
         \\</p>
         \\
     , .{

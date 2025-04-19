@@ -27,15 +27,11 @@ pub fn main() !void {
     const justice3: []const u8 = scrambled[24..31];
     try printPhrase(justice1, justice2, justice3);
 
-    try std.io.getStdOut().writer().print("\n", .{});
+    std.debug.print("\n", .{});
 }
 
 fn printPhrase(part1: []const u8, part2: []const u8, part3: []const u8) !void {
-    const stdout = std.io.getStdOut().writer();
-
-    if (std.mem.eql(u8, part1, "for")) {
-        return error.Word_For;
-    } else return try stdout.print("'{s} {s} {s}.' ", .{ part1, part2, part3 });
+     std.debug.print("'{s} {s} {s}.' ", .{ part1, part2, part3 });
 }
 
-const MyError = error{Word_For};
+//const MyError = error{Word_For};

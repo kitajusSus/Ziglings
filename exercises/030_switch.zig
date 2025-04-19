@@ -25,7 +25,7 @@
 const std = @import("std");
 
 pub fn main() void {
-    const lang_chars = [_]u8{ 26, 9, 7, 42 };
+    const lang_chars = [_]u8{ 25, 9, 7, 42 };
     for (lang_chars) |c| {
         switch (c) {
             1 => std.debug.print("A", .{}),
@@ -39,8 +39,8 @@ pub fn main() void {
             9 => std.debug.print("I", .{}),
             10 => std.debug.print("J", .{}),
             // ... we don't need everything in between ...
-            25 => std.debug.print("Y", .{}),
-            26 => num(2),
+            25 => std.debug.print("Z", .{}),
+            //26 => num(2),
 
             // Switch statements must be "exhaustive" (there must be a
             // match for every possible value).  Please add an "else"

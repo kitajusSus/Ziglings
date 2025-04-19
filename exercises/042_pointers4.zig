@@ -30,11 +30,11 @@ pub fn main() void {
     for (more_nums) |n| {
         std.debug.print("{} ", .{n});
     }
-    // bonus function to print a more_nums
-    for (more_nums) |n| {
-        std.debug.print("more_nums[{}]: {},", .{ n, more_nums[n] });
-    }
-    std.debug.print("\n", .{});
+    // // bonus function to print a more_nums
+    // //for (more_nums, 0..) |n, i| {
+    //     std.debug.print("more_nums[{}]: {},", .{ i,  n });
+    // }
+    // std.debug.print("\n", .{});
 }
 
 // This function should take a reference to a u8 value and set it

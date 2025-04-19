@@ -822,3 +822,36 @@ Imagine you have a special blueprint for a toy box called `Narcissus`.
 **So, Timmie, what does the code do?**
 
 It makes a `Narcissus` box that points to itself. Then it uses magic Zig questions (`@TypeOf`, `@This`, `@typeInfo`) to learn about the _type_ of the box (`Narcissus`) and the _parts_ inside its blueprint (`me`, `myself`, `echo`). Finally, it prints the important parts (`me`, `myself`) but skips the empty one (`echo`). It's all about looking at things and asking questions about what they are and what they're made of!
+
+## 066_comptime.zig
+
+[exercise 066 comptime link](exercises/066_comptime.zig)
+
+Comptime is a powerful feature in Zig that allows you to execute code at compile timeThis means you can generate values,
+types, and even functions before your program runs,
+leading to more efficient and flexible code.
+
+We can do things like this:
+
+```zig
+const skibidi = 123;
+const toilet = 3.21;
+```
+
+I Dont need to precise the `size` of the `const value`. Now they are `comptime_int` and `comptime_float`
+
+If we use variables we need to know how much memory we need to reserve for this.
+Which means this code is wrong
+
+```zig
+var skibidi_var = 123;
+var toilet_var = 3.21;
+```
+
+It's needed to add the size of variable:
+
+```zig
+var skibidi_var: u32 =  321;
+```
+
+## 067_comptime2.zig

@@ -69,8 +69,8 @@ pub fn main() void {
     // if it had a self parameter. But it doesn't. (See above.)
     //
     // The fix for this is very subtle, but it makes a big
-    // difference!
-    const Type2 = narcissus.fetchTheMostBeautifulType();
+    // difference! mine got me into trouble. I should have
+    const Type2 = Narcissus.fetchTheMostBeautifulType();
 
     // Now we print a pithy statement about Narcissus.
     print("A {s} loves all {s}es. ", .{

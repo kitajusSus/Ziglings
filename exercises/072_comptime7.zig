@@ -59,7 +59,7 @@ pub fn main() void {
         // So in a very real sense, this loop actually converts
         // the instructions contained in a string into runtime
         // code at compile time. Guess we're compiler writers
-        // now. See? The wizard hat was justified after all.
+        // now. See? The hat was justified after all.
     }
 
     print("{}\n", .{value});

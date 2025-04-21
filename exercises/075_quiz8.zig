@@ -49,8 +49,16 @@ const Path = struct {
 //
 // Please fill in the body of this function!
 fn makePath(from: *Place, to: *Place, dist: u8) Path {
-
+     return Path{
+        .from = from,
+        .to = to,
+        .dist = dist,
+    };
 }
+//Note that we don't need to use the 'comptime' keyword here
+//because the function is already in a compile time context.
+//the compiler will automatically evaluate this function at
+//compile time.
 
 // Using our new function, these path definitions take up considerably less
 // space in our program now!

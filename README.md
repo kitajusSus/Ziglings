@@ -893,7 +893,23 @@ We are telling compilator that `comptime scale` is a compile-time variable:
 *This is useful for things like array sizes, loop counts, or any other value that can be determined before the program runs.*
 
 ## inline loops 
-okay... Imagine you have three colorful blocks: 🔴, 🟢, 🔵. You want your robot to draw each one.
+1. **Your blocks**  
+   You have three blocks: 🔴 (red), 🟢 (green), 🔵 (blue)
+
+2. **A normal loop (“for”)**  
+   - It’s like telling your toy robot:
+     1. “Pick up one block, draw it”  
+     2. “Pick up the next block, draw it”  
+     3. “Pick up the next block, draw it”  
+   - The robot **thinks each time** it picks a block (this happens at _runtime_).
+
+3. **`inline for` loops**  
+   - You tell your robot **before playtime** exactly what to do with each block.  
+   - The robot writes down three steps on its plan:
+     1. Draw the red block 🔴  
+     2. Draw the green block 🟢  
+     3. Draw the blue block 🔵  
+   - When playtime starts, the robot just follows the steps—no thinking needed!
 
 ```zig
 ```zig
@@ -919,17 +935,113 @@ const std = @import("std");
 pub fn main() void {
     const blocks = [_]u8{ 10, 20, 30 };
 
-    inline for (blocks) |value, index| {
+    inline for (blocks, 0..) |value, index| {
         std.debug.print("Block {} has size {}\n", .{index, value});
     }
 }
 ```
 
+- *At compile time, the robot thinks*:
+```bash
+std.debug.print("Block {} has size {}\n", .{0, 10});
+std.debug.print("Block {} has size {}\n", .{1, 20});
+std.debug.print("Block {} has size {}\n", .{2, 30});
+```
+At runtime, your program just runs those three lines—no looping needed!
+
+### when to use it?
+1. When data is known at compile time. 
+If you're looping over an array, enum, or range that’s fully known during compilation, inline for lets Zig unroll the loop at compile time.
+```zig 
+const primes = [_]u32{2, 3, 5, 7, 11};
+inline for (primes) |p| {
+    comptime std.debug.assert(isPrime(p));
+}
+```
+Each assertion here runs during compilation. If one fails, you get a compile-time error.
+
+2. **When you want to eliminate loop overhead at runtime**
+`inline for` expands into individual statements, so there's no runtime cost for iterating. This can matter in performance-critical code like graphics, DSP, or low-level systems.
+
+3. **When generating code (metaprogramming) `inline for` is great for generating repetitive code safely and cleanly**:
+```zig 
+const Colors = enum { Red, Green, Blue };
+comptime {
+    inline for (@typeInfo(Colors).Enum.fields) |f| {
+        pub const handler_@{f.name} = generateHandler(f.name);
+    }
+}
+```
+4. *When initializing complex compile-time structures*
+```zig 
+const N = 4;
+comptime var matrix: [N][N]f32 = undefined;
+inline for (0..N) |i| {
+    inline for (0..N) |j| {
+        matrix[i][j] = computeEntry(i, j);
+    }
+}
+```
+
+5. *When you want maintainable and DRY code*
+Instead of copy-pasting similar lines, you keep your code clean by looping over a list and generating code for each item.
+
+**When NOT to Use** `inline for`
+1. Huge loops (many elements)
+inline for will literally duplicate the code for every element, which can lead to large binaries and longer compile times.
+
+2. When working with runtime data
+If the data you're looping over is only available at runtime (e.g., user input or file data), you must use a regular for.
+
+3. When performance is not critical
+For simple logic where runtime cost is negligible, normal for loops are easier to read and generate smaller binaries.
+
+🧠 Summary
+**Use inline for when**:
+- All loop data is known at compile time,
+- You want the fastest possible code with no runtime overhead,
+- You're generating code or doing comptime metaprogramming.
+
+*Avoid it when:*
+- Your loop range is large (e.g., 1000+ items),
+- You're working with data only known at runtime,
+- You care about binary size or compilation speed more than raw performance.
 
 
+## 073_comptime8.zig
+[exercise 073 link](exercises/073_comptime8.zig)
+
+## 074_comptime9.zig
 
 
-
-
-
+```bash 
+//
+// In addition to knowing when to use the 'comptime' keyword,
+// it's also good to know when you DON'T need it.
+//
+// The following contexts are already IMPLICITLY evaluated at
+// compile time, and adding the 'comptime' keyword would be
+// superfluous, redundant, and smelly:
+//
+//    * The container-level scope (outside of any function in a source file)
+//    * Type declarations of:
+//        * Variables
+//        * Functions (types of parameters and return values)
+//        * Structs
+//        * Unions
+//        * Enums
+//    * The test expressions in inline for and while loops
+//    * An expression passed to the @cImport() builtin
+//
+// Work with Zig for a while, and you'll start to develop an
+// intuition for these contexts. Let's work on that now.
+//
+// You have been given just one 'comptime' statement to use in
+// the program below. Here it is:
+//
+//     comptime
+//
+// Just one is all it takes. Use it wisely!
+//
+```
 

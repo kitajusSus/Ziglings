@@ -35,8 +35,9 @@ pub fn main() void {
     // In this contrived example, we've decided to allocate some
     // arrays using a variable count! But something's missing...
     //
-    var count = 0;
-
+    // my explaining
+    comptime var count = 0; //zig doesnt knew what size it is (and what size it could be)
+    // which means they are giving errors
     count += 1;
     const a1: [count]u8 = .{'A'} ** count;
 

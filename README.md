@@ -855,3 +855,43 @@ var skibidi_var: u32 =  321;
 ```
 
 ## 067_comptime2.zig
+
+[exercise 067 comptime2 link](exercises/067_comptime2.zig)
+
+```bash
+//  .     .   .      o       .          .       *  . .     .
+//    .  *  |     .    .            .   .     .   .     * .    .
+//        --o--            comptime        *    |      ..    .
+//     *    |       *  .        .    .   .    --*--  .     *  .
+//  .     .    .    .   . . .      .        .   |   .    .  .
+```
+
+when I use comptime before declaration of variable, zig will perform every usage of this variable in comptime
+
+```zig
+comptime var skibidi: u32 = 123; //comptime
+var toilet: f32 = 2.11; //no comptime == RUNtime and no error
+var toilet2 = 2123; //error (no declaration of size)
+```
+
+But they said that the using of `comptime` is **A CRIME** if I use this on unassigned size variablee. fun?
+
+## 068_comptime3.zig
+
+[exercise 068 comptime3 link](exercises/068_comptime3.zig)
+
+When we write something like this:
+
+```zig
+fn scaleMe(self: *Schooner, comptime scale: u32) void {}
+```
+
+We are telling compilator that `comptime`scale:
+
+> this variable its need to be known at compile time. So, when we call this function, we need to pass a value that is known at compile time.
+
+_This is useful for things like array sizes, loop counts, or any other value that can be determined before the program runs._
+
+```zig
+
+```

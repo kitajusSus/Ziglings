@@ -886,12 +886,50 @@ When we write something like this:
 fn scaleMe(self: *Schooner, comptime scale: u32) void {}
 ```
 
-We are telling compilator that `comptime`scale:
+We are telling compilator that `comptime scale` is a compile-time variable: 
 
 > this variable its need to be known at compile time. So, when we call this function, we need to pass a value that is known at compile time.
 
-_This is useful for things like array sizes, loop counts, or any other value that can be determined before the program runs._
+*This is useful for things like array sizes, loop counts, or any other value that can be determined before the program runs.*
+
+## inline loops 
+okay... Imagine you have three colorful blocks: 🔴, 🟢, 🔵. You want your robot to draw each one.
 
 ```zig
+```zig
+const std = @import("std");
 
+pub fn main() void {
+    const blocks = [_]u8{ 10, 20, 30 };
+    for (blocks) |value, index| {
+        std.debug.print("Block {} has size {}\n", .{index, value});
+    }
+}
 ```
+
+*At runtime, the robot thinks*:
+- “Pick up block 0…”
+- “Pick up block 1…”
+- “Pick up block 2…”
+
+2. Inline (`inline for`):
+```zig
+const std = @import("std");
+
+pub fn main() void {
+    const blocks = [_]u8{ 10, 20, 30 };
+
+    inline for (blocks) |value, index| {
+        std.debug.print("Block {} has size {}\n", .{index, value});
+    }
+}
+```
+
+
+
+
+
+
+
+
+

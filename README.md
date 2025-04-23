@@ -1014,7 +1014,7 @@ For simple logic where runtime cost is negligible, normal for loops are easier t
 ## 074_comptime9.zig
 
 
-```bash 
+```zig 
 //
 // In addition to knowing when to use the 'comptime' keyword,
 // it's also good to know when you DON'T need it.

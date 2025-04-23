@@ -25,7 +25,7 @@ pub fn main() !void {
 
     // ===== Alokacja tablicy =====
     // alloc() - alokuje tablicę elementów
-    var numbers = try allocator.alloc(i32, 5);
+    var numbers = try allocator.alloc(i32, 10);
     defer allocator.free(numbers); // zwalnianie tablicy
 
     // Poprawiona pętla z poprawnym użyciem @intCast
@@ -36,9 +36,10 @@ pub fn main() !void {
 
     std.debug.print("Tablica: {any}\n", .{numbers});
 }
+//pozdrawiam erykl
 
 // Prosta struktura do demonstracji
 const Point = struct {
-    x: i32,
+    x: f32,
     y: i32,
 };

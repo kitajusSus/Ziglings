@@ -1044,4 +1044,14 @@ For simple logic where runtime cost is negligible, normal for loops are easier t
 // Just one is all it takes. Use it wisely!
 //
 ```
+## Sentinels 77_sentinels.zig
+
+
+- `const a`: [5]u8 = "array".*;
+- `const b:` *const [16]u8 = "pointer to array";
+- `const c:` []const u8 = "slice";
+- `const d:` [:0]const u8 = "slice with sentinel";
+- `const e:` [*:0]const u8 = "many-item pointer with sentinel";
+- `const f:` [*]const u8 = "many-item pointer";
+ 
 

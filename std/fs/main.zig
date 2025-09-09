@@ -4,11 +4,10 @@ pub fn main() !void {
     var cwd = std.fs.cwd();
     const tmp_name = "fs_example.txt";
 
-    // Create and write a file.
     {
         var file = try cwd.createFile(tmp_name, .{ .read = true, .truncate = true });
         defer file.close();
-        try file.writeAll("Przykład modułu std.fs\n");
+        try file.writeAll("example of  std.fs module\n");
     }
 
     // Read the file back into memory.

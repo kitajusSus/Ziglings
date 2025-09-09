@@ -1045,7 +1045,12 @@ For simple logic where runtime cost is negligible, normal for loops are easier t
 //
 ```
 ## Sentinels 77_sentinels.zig
+```bash
 
+
+
+
+```
 
 - `const a`: [5]u8 = "array".*;
 - `const b:` *const [16]u8 = "pointer to array";

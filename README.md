@@ -35,7 +35,7 @@ printCharacter(&glorp);
 
 # 050_no_value.zig
 
-What is Undefined?  
+What is Undefined?
 There are 4 ways to tell ziggi that variable/const or something does not have any value. ("no value")
 
 1. Str8 forward
@@ -886,29 +886,29 @@ When we write something like this:
 fn scaleMe(self: *Schooner, comptime scale: u32) void {}
 ```
 
-We are telling compilator that `comptime scale` is a compile-time variable: 
+We are telling compilator that `comptime scale` is a compile-time variable:
 
 > this variable its need to be known at compile time. So, when we call this function, we need to pass a value that is known at compile time.
 
 *This is useful for things like array sizes, loop counts, or any other value that can be determined before the program runs.*
 
-## inline loops 
-1. **Your blocks**  
+## inline loops
+1. **Your blocks**
    You have three blocks: 🔴 (red), 🟢 (green), 🔵 (blue)
 
-2. **A normal loop (“for”)**  
+2. **A normal loop (“for”)**
    - It’s like telling your toy robot:
-     1. “Pick up one block, draw it”  
-     2. “Pick up the next block, draw it”  
-     3. “Pick up the next block, draw it”  
+     1. “Pick up one block, draw it”
+     2. “Pick up the next block, draw it”
+     3. “Pick up the next block, draw it”
    - The robot **thinks each time** it picks a block (this happens at _runtime_).
 
-3. **`inline for` loops**  
-   - You tell your robot **before playtime** exactly what to do with each block.  
+3. **`inline for` loops**
+   - You tell your robot **before playtime** exactly what to do with each block.
    - The robot writes down three steps on its plan:
-     1. Draw the red block 🔴  
-     2. Draw the green block 🟢  
-     3. Draw the blue block 🔵  
+     1. Draw the red block 🔴
+     2. Draw the green block 🟢
+     3. Draw the blue block 🔵
    - When playtime starts, the robot just follows the steps—no thinking needed!
 
 ```zig
@@ -950,9 +950,9 @@ std.debug.print("Block {} has size {}\n", .{2, 30});
 At runtime, your program just runs those three lines—no looping needed!
 
 ### when to use it?
-1. When data is known at compile time. 
+1. When data is known at compile time.
 If you're looping over an array, enum, or range that’s fully known during compilation, inline for lets Zig unroll the loop at compile time.
-```zig 
+```zig
 const primes = [_]u32{2, 3, 5, 7, 11};
 inline for (primes) |p| {
     comptime std.debug.assert(isPrime(p));
@@ -964,7 +964,7 @@ Each assertion here runs during compilation. If one fails, you get a compile-tim
 `inline for` expands into individual statements, so there's no runtime cost for iterating. This can matter in performance-critical code like graphics, DSP, or low-level systems.
 
 3. **When generating code (metaprogramming) `inline for` is great for generating repetitive code safely and cleanly**:
-```zig 
+```zig
 const Colors = enum { Red, Green, Blue };
 comptime {
     inline for (@typeInfo(Colors).Enum.fields) |f| {
@@ -973,7 +973,7 @@ comptime {
 }
 ```
 4. *When initializing complex compile-time structures*
-```zig 
+```zig
 const N = 4;
 comptime var matrix: [N][N]f32 = undefined;
 inline for (0..N) |i| {
@@ -1014,7 +1014,7 @@ For simple logic where runtime cost is negligible, normal for loops are easier t
 ## 074_comptime9.zig
 
 
-```zig 
+```zig
 //
 // In addition to knowing when to use the 'comptime' keyword,
 // it's also good to know when you DON'T need it.
@@ -1058,5 +1058,10 @@ For simple logic where runtime cost is negligible, normal for loops are easier t
 - `const d:` [:0]const u8 = "slice with sentinel";
 - `const e:` [*:0]const u8 = "many-item pointer with sentinel";
 - `const f:` [*]const u8 = "many-item pointer";
- 
 
+
+## Its imposible to do all async exercises then I  skip them for now
+
+[exercises 084]()
+
+##  092_interfaces.zig

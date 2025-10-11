@@ -4,7 +4,7 @@
 // the individual functions are implemented. Because this is wonderfully
 // suitable as a template for your own functions. In addition these
 // standard functions are part of the basic configuration of Zig.
-//
+
 // This means that they are always available on every system.
 // Therefore it is worthwhile to deal with them also in Ziglings.
 // It's a great way to learn important skills. For example, it is
@@ -136,7 +136,7 @@ pub fn main() !void {
     ;
 
     // now the tokenizer, but what do we need here?
-    var it = std.mem.tokenizeAny(u8, poem, ???);
+    var it = std.mem.tokenizeAny(u8, poem, " ,");
 
     // print all words and count them
     var cnt: usize = 0;

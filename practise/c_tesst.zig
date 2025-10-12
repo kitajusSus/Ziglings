@@ -15,10 +15,19 @@ const Particle = struct {
     size: f32,
     active: bool,
 };
-
+const colors = [_]ray.Color{
+    ray.GOLD,
+    ray.PINK,
+    ray.LIME,
+    ray.SKYBLUE,
+    ray.VIOLET,
+    ray.ORANGE,
+    ray.RED,
+    ray.GREEN,
+};
 // Struktura zarządzająca systemem cząsteczek
 var particles: [MAX_PARTICLES]Particle = undefined;
-var gravity: ray.Vector3 = .{ .x = 0, .y = -0.05, .z = 0 };
+var gravity: ray.Vector3 = .{ .x = 0.001, .y = -0.05, .z = 0 };
 
 // Funkcja do resetowania cząsteczek
 fn initParticles() void {
@@ -34,7 +43,7 @@ fn initParticles() void {
                 .y = std.crypto.random.float(f32) * 2 - 1,
                 .z = std.crypto.random.float(f32) * 2 - 1,
             },
-            .color = ray.RAYWHITE,
+            .color = colors[std.crypto.random.intRangeLessThan(u32, 0, colors.len)],
             .alpha = 1.0,
             .size = std.crypto.random.float(f32) * 0.2 + 0.1,
             .active = true,
@@ -70,7 +79,7 @@ fn updateParticles() void {
                     .y = std.crypto.random.float(f32) * 2 - 1,
                     .z = std.crypto.random.float(f32) * 2 - 1,
                 },
-                .color = ray.RAYWHITE,
+                .color = colors[std.crypto.random.intRangeLessThan(u32, 0, colors.len)],
                 .alpha = 1.0,
                 .size = std.crypto.random.float(f32) * 0.2 + 0.1,
                 .active = true,
@@ -125,6 +134,6 @@ pub fn main() !void {
         ray.EndMode3D();
 
         ray.DrawFPS(10, 10);
-        ray.DrawText("KOCHAM ZIG SEKS WARSZAWIAKA I SPERME!", 250, 350, 35, ray.GREEN);
+        ray.DrawText("SKIBIDI TOILET", 250, 350, 60, ray.GREEN);
     }
 }

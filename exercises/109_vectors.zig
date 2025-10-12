@@ -94,7 +94,8 @@ const v8_min = @reduce(.Min, v8); // 2
 // Fixed-length arrays can be automatically assigned to vectors (and vice-versa).
 const single_digit_primes = [4]i8{ 2, 3, 5, 7 };
 const prime_vector: @Vector(4, i8) = single_digit_primes;
-
+// const skibidi: @Vector(4, i8) = @Vector(4, i4);
+// _ = skibidi;
 // Now let's use vectors to simplify and optimize some code!
 //
 // Ewa is writing a program in which they frequently want to compare
@@ -121,8 +122,8 @@ fn calcMaxPairwiseDiffOld(list1: [4]f32, list2: [4]f32) f32 {
 
 const Vec4 = @Vector(4, f32);
 fn calcMaxPairwiseDiffNew(a: Vec4, b: Vec4) f32 {
-    const abs_diff_vec = ???;
-    const max_diff = @reduce(???, abs_diff_vec);
+    const abs_diff_vec = @abs(a - b);
+    const max_diff = @reduce(.Max, abs_diff_vec);
     return max_diff;
 }
 
@@ -144,4 +145,7 @@ pub fn main() void {
     const mpd_new = calcMaxPairwiseDiffNew(l1, l2);
     print("Max difference (old fn): {d: >5.3}\n", .{mpd_old});
     print("Max difference (new fn): {d: >5.3}\n", .{mpd_new});
+    const skibidi: @Vector(4, i16) = @splat(4);
+    const toilet = [4]@Vector(4, i16){ skibidi, skibidi, skibidi, skibidi };
+    print("sprawdzanie czy tak można {any}\n", .{toilet});
 }

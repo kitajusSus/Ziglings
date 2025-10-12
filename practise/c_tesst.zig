@@ -18,6 +18,6 @@ pub fn main() void {
 
         ray.ClearBackground(ray.RAYWHITE);
         ray.DrawText("KOCHAM CIE  !", 190, 200, 20, ray.PINK);
-        ray.DrawText("Skibidi!!!", 150, 160, 25, ray.BLUE);
+        ray.DrawText("MAMO!!!", 150, 160, 30, ray.RED);
     }
 }

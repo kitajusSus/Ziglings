@@ -33,7 +33,8 @@ pub fn main() !void {
     // initalize an array of u8 with all letter 'A'
     // we need to pick the size of the array, 64 seems like a good number
     // fix the initalization below
-    var content = ['A']*64;
+    // important to see the diffrente braces
+    var content = [_]u8{'A'} ** 64;
     // this should print out : `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`
     std.debug.print("{s}\n", .{content});
 
@@ -41,7 +42,7 @@ pub fn main() !void {
     // can you go here to find a way to read the content?
     // https://ziglang.org/documentation/master/std/#std.fs.File
     // hint: you might find two answers that are both vaild in this case
-    const bytes_read = zig_read_the_file_or_i_will_fight_you(&content);
+    const bytes_read = try file.read(&content);
 
     // Woah, too screamy. I know you're excited for zigling time but tone it down a bit.
     // Can you print only what we read from the file?

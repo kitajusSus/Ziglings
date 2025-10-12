@@ -1064,4 +1064,7 @@ For simple logic where runtime cost is negligible, normal for loops are easier t
 
 [exercises 084]()
 
-##  092_interfaces.zig
+##  092_interfaces.ziggi
+
+
+

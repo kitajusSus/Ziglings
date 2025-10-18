@@ -1,7 +1,5 @@
 //
 // PODSTAWOWE ZARZĄDZANIE PAMIĘCIĄ W ZIG
-//
-// Ten program pokazuje podstawowe sposoby alokacji pamięci.
 
 const std = @import("std");
 
@@ -9,7 +7,6 @@ pub fn main() !void {
     // Standardowy alokator ogólnego przeznaczenia
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer {
-        // Sprawdzamy, czy nie ma wycieków pamięci
         const deinit_status = gpa.deinit();
         std.debug.print("GPA deinit: leaks detected: {}\n", .{deinit_status == .leak});
     }
@@ -30,7 +27,6 @@ pub fn main() !void {
 
     // Poprawiona pętla z poprawnym użyciem @intCast
     for (0..numbers.len) |i| {
-        // Poprawne użycie @intCast z dwoma argumentami: typem docelowym i wartością
         numbers[i] = @as(i32, @intCast(i)) * 10;
     }
 

@@ -33,7 +33,7 @@
 // "Every memory you allocate in the heap needs
 // to be explicitly freed by you, the programmer."
 ```
-More of these in Stack_overflow chapter
+More of these in  Allocators chapter
 
 The majority of allocators in Zig do allocate memory on the heap.
 But some exceptions to this rule are `ArenaAllocator()` and `FixedBufferAllocator()`.

@@ -5,7 +5,7 @@
 // Bardzo przydatny gdy mamy wiele alokacji, które chcemy zwolnić w tym samym czasie.
 
 const std = @import("std");
-
+// const std =
 const Point = struct {
     x: i32,
     y: i32,

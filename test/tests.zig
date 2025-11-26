@@ -43,7 +43,7 @@ pub fn addCliTests(b: *std.Build, exercises: []const Exercise) *Step {
             cmd.expectExitCode(0);
             cmd.step.dependOn(&heal_step.step);
 
-            const stderr = cmd.captureStdErr();
+            const stderr = cmd.captureStdErr(.{});
             const verify = CheckNamedStep.create(b, ex, stderr);
             verify.step.dependOn(&cmd.step);
 
@@ -78,7 +78,7 @@ pub fn addCliTests(b: *std.Build, exercises: []const Exercise) *Step {
         cmd.expectExitCode(0);
         cmd.step.dependOn(&heal_step.step);
 
-        const stderr = cmd.captureStdErr();
+        const stderr = cmd.captureStdErr(.{});
         const verify = CheckStep.create(b, exercises, stderr);
         verify.step.dependOn(&cmd.step);
 
@@ -161,7 +161,9 @@ const CheckNamedStep = struct {
         );
         defer stderr_file.close();
 
-        const stderr = stderr_file.reader();
+        var threaded: std.Io.Threaded = .init_single_threaded;
+        const io = threaded.io();
+        var stderr = stderr_file.readerStreaming(io, &.{});
         {
             // Skip the logo.
             const nlines = mem.count(u8, root.logo, "\n");
@@ -169,10 +171,10 @@ const CheckNamedStep = struct {
 
             var lineno: usize = 0;
             while (lineno < nlines) : (lineno += 1) {
-                _ = try readLine(stderr, &buf);
+                _ = try readLine(&stderr, &buf);
             }
         }
-        try check_output(step, ex, stderr);
+        try check_output(step, ex, &stderr);
     }
 };
 
@@ -213,7 +215,9 @@ const CheckStep = struct {
         );
         defer stderr_file.close();
 
-        const stderr = stderr_file.reader();
+        var threaded: std.Io.Threaded = .init_single_threaded;
+        const io = threaded.io();
+        var stderr = stderr_file.readerStreaming(io, &.{});
         for (exercises) |ex| {
             if (ex.number() == 1) {
                 // Skip the logo.
@@ -222,15 +226,15 @@ const CheckStep = struct {
 
                 var lineno: usize = 0;
                 while (lineno < nlines) : (lineno += 1) {
-                    _ = try readLine(stderr, &buf);
+                    _ = try readLine(&stderr, &buf);
                 }
             }
-            try check_output(step, ex, stderr);
+            try check_output(step, ex, &stderr);
         }
     }
 };
 
-fn check_output(step: *Step, exercise: Exercise, reader: Reader) !void {
+fn check_output(step: *Step, exercise: Exercise, reader: *Reader) !void {
     const b = step.owner;
 
     var buf: [1024]u8 = undefined;
@@ -297,12 +301,9 @@ fn check(
     }
 }
 
-fn readLine(reader: fs.File.Reader, buf: []u8) !?[]const u8 {
-    if (try reader.readUntilDelimiterOrEof(buf, '\n')) |line| {
-        return mem.trimRight(u8, line, " \r\n");
-    }
-
-    return null;
+fn readLine(reader: *fs.File.Reader, buf: []u8) !?[]const u8 {
+    try reader.interface.readSliceAll(buf);
+    return mem.trimRight(u8, buf, " \r\n");
 }
 
 /// Fails with a custom error message.
@@ -405,7 +406,8 @@ fn heal(allocator: Allocator, exercises: []const Exercise, work_path: []const u8
 /// difference that returns an error when the temp path cannot be created.
 pub fn makeTempPath(b: *Build) ![]const u8 {
     const rand_int = std.crypto.random.int(u64);
-    const tmp_dir_sub_path = "tmp" ++ fs.path.sep_str ++ Build.hex64(rand_int);
+    const rand_hex64 = std.fmt.hex(rand_int);
+    const tmp_dir_sub_path = "tmp" ++ fs.path.sep_str ++ rand_hex64;
     const path = b.cache_root.join(b.allocator, &.{tmp_dir_sub_path}) catch
         @panic("OOM");
     try b.cache_root.handle.makePath(tmp_dir_sub_path);

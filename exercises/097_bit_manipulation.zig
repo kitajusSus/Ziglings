@@ -72,8 +72,8 @@ const print = std.debug.print;
 pub fn main() !void {
 
     // As in the example above, we use 1 and 0 as values for x and y
-    var x: u8 = 1;
-    var y: u8 = 0;
+    var x: u8 = 0b1001;
+    var y: u8 = 0b1011;
 
     // Now we swap the values of the two variables by doing xor on them
     x ^= y;

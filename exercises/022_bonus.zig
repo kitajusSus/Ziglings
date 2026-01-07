@@ -1,4 +1,6 @@
-// chce zrobic kod który pokazuje wam jak wyglada dokladnie to scalanie bledu lub wartosci w realnym programie i samemu chciałbym to lepiej zrozumiec wiec składnia zostanie jako tako zachowana jak w oryginale i nazwy funkcji
+// chce zrobic kod który pokazuje wam jak wyglada dokladnie to scalanie bledu
+// lub wartosci w realnym programie i samemu chciałbym to lepiej zrozumiec wiec
+// składnia zostanie jako tako zachowana jak w oryginale i nazwy funkcji
 
 const std = @import("std");
 

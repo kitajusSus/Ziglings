@@ -71,8 +71,8 @@ const print = std.debug.print;
 
 pub fn main() !void {
 
-    // As in the example above, we use 1 and 0 as values for x and y
-    var x: u8 = 0b1001;
+    // Let us use 1101 and 1011 as values for x and y
+    var x: u8 = 0b1101;
     var y: u8 = 0b1011;
 
     // Now we swap the values of the two variables by doing xor on them
@@ -82,7 +82,7 @@ pub fn main() !void {
     // What must be written here?
     x ^= y;
 
-    print("x = {d}; y = {d}\n", .{ x, y });
+    print("x = {b}; y = {b}\n", .{ x, y });
 }
 
 // This variable swap takes advantage of the fact that the value resulting
@@ -93,3 +93,4 @@ pub fn main() !void {
 //
 // For Crypto it is better not to use this, but in sorting algorithms like
 // Bubble Sort it works very well.
+

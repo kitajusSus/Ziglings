@@ -1,4 +1,3 @@
-//
 // Grouping values in structs is not merely convenient. It also allows
 // us to treat the values as a single item when storing them, passing
 // them to functions, etc.

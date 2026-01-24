@@ -136,7 +136,7 @@ pub fn main() !void {
     ;
 
     // now the tokenizer, but what do we need here?
-    var it = std.mem.tokenizeAny(u8, poem, " ,");
+    var it = std.mem.tokenizeAny(u8, poem, " ,;!\n");
 
     // print all words and count them
     var cnt: usize = 0;
@@ -145,6 +145,5 @@ pub fn main() !void {
         print("{s}\n", .{word});
     }
 
-    // print the result
     print("This little poem has {d} words!\n", .{cnt});
 }

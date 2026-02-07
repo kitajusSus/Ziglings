@@ -3,16 +3,14 @@ const root = @import("../build.zig");
 
 const debug = std.debug;
 const fmt = std.fmt;
-const fs = std.fs;
 const mem = std.mem;
 
 const Allocator = std.mem.Allocator;
-const Child = std.process.Child;
+const Process = std.process;
 const Build = std.Build;
-const LazyPath = std.Build.LazyPath;
-const Reader = fs.File.Reader;
-const RunStep = std.Build.RunStep;
 const Step = Build.Step;
+const RunStep = Build.RunStep;
+const LazyPath = Build.LazyPath;
 
 const Exercise = root.Exercise;
 
@@ -23,9 +21,10 @@ pub fn addCliTests(b: *std.Build, exercises: []const Exercise) *Step {
         // Test that `zig build -Dhealed -Dn=n` selects the nth exercise.
         const case_step = createCase(b, "case-1");
 
-        const tmp_path = makeTempPath(b) catch |err| {
+        const tmp_path = createTempPath(b) catch |err| {
             return fail(step, "unable to make tmp path: {s}\n", .{@errorName(err)});
         };
+        defer deleteTmpPath(b, tmp_path);
 
         const heal_step = HealStep.create(b, exercises, tmp_path);
 
@@ -49,20 +48,16 @@ pub fn addCliTests(b: *std.Build, exercises: []const Exercise) *Step {
 
             case_step.dependOn(&verify.step);
         }
-
-        const cleanup = b.addRemoveDirTree(.{ .src_path = .{ .owner = b, .sub_path = tmp_path } });
-        cleanup.step.dependOn(case_step);
-
-        step.dependOn(&cleanup.step);
     }
 
     {
         // Test that `zig build -Dhealed` processes all the exercises in order.
         const case_step = createCase(b, "case-2");
 
-        const tmp_path = makeTempPath(b) catch |err| {
+        const tmp_path = createTempPath(b) catch |err| {
             return fail(step, "unable to make tmp path: {s}\n", .{@errorName(err)});
         };
+        defer deleteTmpPath(b, tmp_path);
 
         const heal_step = HealStep.create(b, exercises, tmp_path);
         heal_step.step.dependOn(case_step);
@@ -81,11 +76,6 @@ pub fn addCliTests(b: *std.Build, exercises: []const Exercise) *Step {
         const stderr = cmd.captureStdErr(.{});
         const verify = CheckStep.create(b, exercises, stderr);
         verify.step.dependOn(&cmd.step);
-
-        const cleanup = b.addRemoveDirTree(.{ .src_path = .{ .owner = b, .sub_path = tmp_path } });
-        cleanup.step.dependOn(&verify.step);
-
-        step.dependOn(&cleanup.step);
     }
 
     {
@@ -152,17 +142,17 @@ const CheckNamedStep = struct {
 
     fn make(step: *Step, _: Step.MakeOptions) !void {
         const b = step.owner;
+        const io = b.graph.io;
         const self: *CheckNamedStep = @alignCast(@fieldParentPtr("step", step));
         const ex = self.exercise;
 
-        const stderr_file = try fs.cwd().openFile(
+        const stderr_file = try std.Io.Dir.cwd().openFile(
+            io,
             self.stderr.getPath(b),
             .{ .mode = .read_only },
         );
-        defer stderr_file.close();
+        defer stderr_file.close(io);
 
-        var threaded: std.Io.Threaded = .init_single_threaded;
-        const io = threaded.io();
         var stderr = stderr_file.readerStreaming(io, &.{});
         {
             // Skip the logo.
@@ -206,17 +196,17 @@ const CheckStep = struct {
 
     fn make(step: *Step, _: Step.MakeOptions) !void {
         const b = step.owner;
+        const io = b.graph.io;
         const self: *CheckStep = @alignCast(@fieldParentPtr("step", step));
         const exercises = self.exercises;
 
-        const stderr_file = try fs.cwd().openFile(
+        const stderr_file = try std.Io.Dir.cwd().openFile(
+            io,
             self.stderr.getPath(b),
             .{ .mode = .read_only },
         );
-        defer stderr_file.close();
+        defer stderr_file.close(io);
 
-        var threaded: std.Io.Threaded = .init_single_threaded;
-        const io = threaded.io();
         var stderr = stderr_file.readerStreaming(io, &.{});
         for (exercises) |ex| {
             if (ex.number() == 1) {
@@ -234,7 +224,7 @@ const CheckStep = struct {
     }
 };
 
-fn check_output(step: *Step, exercise: Exercise, reader: *Reader) !void {
+fn check_output(step: *Step, exercise: Exercise, reader: *std.Io.File.Reader) !void {
     const b = step.owner;
 
     var buf: [1024]u8 = undefined;
@@ -301,9 +291,9 @@ fn check(
     }
 }
 
-fn readLine(reader: *fs.File.Reader, buf: []u8) !?[]const u8 {
+fn readLine(reader: *std.Io.File.Reader, buf: []u8) !?[]const u8 {
     try reader.interface.readSliceAll(buf);
-    return mem.trimRight(u8, buf, " \r\n");
+    return mem.trimEnd(u8, buf, " \r\n");
 }
 
 /// Fails with a custom error message.
@@ -379,8 +369,9 @@ const HealStep = struct {
 
 /// Heals all the exercises.
 fn heal(allocator: Allocator, exercises: []const Exercise, work_path: []const u8) !void {
-    const sep = std.fs.path.sep_str;
-    const join = fs.path.join;
+    const io = std.Options.debug_io;
+    const sep = std.Io.Dir.path.sep_str;
+    const join = std.Io.Dir.path.join;
 
     const exercises_path = "exercises";
     const patches_path = "patches" ++ sep ++ "patches";
@@ -397,20 +388,26 @@ fn heal(allocator: Allocator, exercises: []const Exercise, work_path: []const u8
 
         const argv = &.{ "patch", "-i", patch, "-o", output, "-s", file };
 
-        var child = Child.init(argv, allocator);
-        _ = try child.spawnAndWait();
+        _ = try Process.run(allocator, io, .{ .argv = argv });
     }
 }
 
-/// This function is the same as the one in std.Build.makeTempPath, with the
-/// difference that returns an error when the temp path cannot be created.
-pub fn makeTempPath(b: *Build) ![]const u8 {
-    const rand_int = std.crypto.random.int(u64);
-    const rand_hex64 = std.fmt.hex(rand_int);
-    const tmp_dir_sub_path = "tmp" ++ fs.path.sep_str ++ rand_hex64;
-    const path = b.cache_root.join(b.allocator, &.{tmp_dir_sub_path}) catch
-        @panic("OOM");
-    try b.cache_root.handle.makePath(tmp_dir_sub_path);
+fn createTempPath(b: *Build) ![]const u8 {
+    const io = b.graph.io;
+    const rand_int = r: {
+        var x: u64 = undefined;
+        io.random(@ptrCast(&x));
+        break :r x;
+    };
+    const tmp_dir_sub_path = "tmp" ++ std.Io.Dir.path.sep_str ++ std.fmt.hex(rand_int);
+    const result_path = b.cache_root.join(b.allocator, &.{tmp_dir_sub_path}) catch @panic("OOM");
+    try b.cache_root.handle.createDirPath(io, tmp_dir_sub_path);
+    return result_path;
+}
 
-    return path;
+fn deleteTmpPath(b: *Build, path: []const u8) void {
+    const io = b.graph.io;
+    std.Io.Dir.cwd().deleteTree(io, path) catch |err| {
+        std.log.warn("failed to delete {s}: {t}", .{ path, err });
+    };
 }

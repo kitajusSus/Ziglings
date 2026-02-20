@@ -16,7 +16,7 @@
 // Therefore, the comments for the format() function are the only
 // way to definitively learn how to format strings in Zig:
 //
-//     https://github.com/ziglang/zig/blob/master/lib/std/fmt.zig#L33
+//     https://codeberg.org/ziglang/zig/src/branch/master/lib/std/Io/Writer.zig#L537
 //
 // Zig already has a very nice selection of formatting options.
 // These can be used in different ways, but generally to convert
@@ -60,7 +60,7 @@
 // variety of formatting instructions. It's basically a tiny
 // language of its own. Here's a numeric example:
 //
-//     print("Catch-{x:0>4}.", .{twenty_two});
+//     print("Catch-0x{x:0>4}.", .{twenty_two});
 //
 // This formatting instruction outputs a hexadecimal number with
 // leading zeros:
@@ -131,7 +131,7 @@ pub fn main() !void {
         for (0..size) |b| {
             // What formatting is needed here to make our columns
             // nice and straight?
-            print("{d:>3} ", .{(a + 1) * (b + 1)});
+            print("{???} ", .{(a + 1) * (b + 1)});
         }
 
         // After each row we use double line feed:

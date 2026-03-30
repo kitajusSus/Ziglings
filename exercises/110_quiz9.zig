@@ -1,4 +1,3 @@
-// ----------------------------------------------------------------------------
 // Quiz Time: Toggling, Setting, and Clearing Bits
 // ----------------------------------------------------------------------------
 //
@@ -8,7 +7,7 @@
 // drive your next robot or greenhouse climate control system! Ready to enter
 // the exciting world of embedded programming? Let's get started!
 //
-// ----------------------------------------------------------------------------
+
 // Some Background
 // ----------------------------------------------------------------------------
 //

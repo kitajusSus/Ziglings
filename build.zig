@@ -15,7 +15,7 @@ const print = std.debug.print;
 //     1) Getting Started
 //     2) Version Changes
 comptime {
-    const required_zig = "0.16.0-dev.2075";
+    const required_zig = "0.16.0-dev.2915";
     const current_zig = builtin.zig_version;
     const min_zig = std.SemanticVersion.parse(required_zig) catch unreachable;
     if (current_zig.order(min_zig) == .lt) {
@@ -71,6 +71,9 @@ pub const Exercise = struct {
 
     /// This exercise is not supported by the current Zig compiler.
     skip: bool = false,
+
+    /// Hint to the user, why this has been skipped
+    skip_hint: ?[]const u8 = null,
 
     /// Returns the name of the main file with .zig stripped.
     pub fn name(self: Exercise) []const u8 {
@@ -128,23 +131,13 @@ pub fn build(b: *Build) !void {
     if (!validate_exercises()) std.process.exit(2);
 
     use_color_escapes = false;
-    if (try std.Io.File.stderr().supportsAnsiEscapeCodes(io)) {
+    const stderr = std.Io.File.stderr();
+    if (try stderr.supportsAnsiEscapeCodes(io)) {
         use_color_escapes = true;
     } else if (builtin.os.tag == .windows) {
-        const w32 = struct {
-            const DWORD = std.os.windows.DWORD;
-            const ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
-            const STD_ERROR_HANDLE: DWORD = @bitCast(@as(i32, -12));
-            const GetStdHandle = std.os.windows.kernel32.GetStdHandle;
-            const GetConsoleMode = std.os.windows.kernel32.GetConsoleMode;
-            const SetConsoleMode = std.os.windows.kernel32.SetConsoleMode;
-        };
-        const handle = w32.GetStdHandle(w32.STD_ERROR_HANDLE).?;
-        var mode: w32.DWORD = 0;
-        if (w32.GetConsoleMode(handle, &mode) != 0) {
-            mode |= w32.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-            use_color_escapes = w32.SetConsoleMode(handle, mode) != 0;
-        }
+        if (stderr.enableAnsiEscapeCodes(io)) {
+            use_color_escapes = true;
+        } else |_| {}
     }
 
     if (use_color_escapes) {
@@ -275,7 +268,7 @@ pub fn build(b: *Build) !void {
 
         const progress_file_size = try progress_file.length(io);
 
-        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+        var gpa = std.heap.DebugAllocator(.{}){};
         defer _ = gpa.deinit();
         const allocator = gpa.allocator();
         const contents = try allocator.alloc(u8, progress_file_size);
@@ -288,7 +281,8 @@ pub fn build(b: *Build) !void {
             return error.UnexpectedEOF;
         }
 
-        starting_exercise = try std.fmt.parseInt(u32, contents, 10);
+        const trimmed_contents = std.mem.trim(u8, contents, "\r\n");
+        starting_exercise = try std.fmt.parseInt(u32, trimmed_contents, 10);
     } else |err| {
         switch (err) {
             std.Io.File.OpenError.FileNotFound => {
@@ -356,8 +350,12 @@ const ZiglingStep = struct {
         const self: *ZiglingStep = @alignCast(@fieldParentPtr("step", step));
 
         if (self.exercise.skip) {
-            print("Skipping {s}\n\n", .{self.exercise.main_file});
+            print("Skipping {s}", .{self.exercise.main_file});
 
+            if (self.exercise.skip_hint) |hint|
+                print("\n{s}Reason: {s}{s}\n", .{ bold_text, hint, reset_text });
+
+            print("\n\n", .{});
             return;
         }
 
@@ -397,9 +395,8 @@ const ZiglingStep = struct {
 
         const result = Process.run(b.allocator, io, .{
             .argv = &.{exe_path},
-            .cwd = b.build_root.path.?,
-            .cwd_dir = b.build_root.handle,
-            .max_output_bytes = max_output_bytes,
+            .cwd = .{ .path = b.build_root.path.? },
+            .stdout_limit = .limited(max_output_bytes),
         }) catch |err| {
             return self.step.fail("unable to spawn {s}: {s}", .{
                 exe_path, @errorName(err),
@@ -517,6 +514,7 @@ const ZiglingStep = struct {
         // Enable C support for exercises that use C functions.
         if (self.exercise.link_libc) {
             zig_args.append("-lc") catch @panic("OOM");
+            zig_args.append("-fllvm") catch @panic("OOM");
         }
 
         if (b.reference_trace) |rt| {
@@ -1045,11 +1043,7 @@ const exercises = [_]Exercise{
         .main_file = "073_comptime8.zig",
         .output = "My llama value is 25.",
     },
-    .{
-        .main_file = "074_comptime9.zig",
-        .output = "My llama value is 2.",
-        .skip = true,
-    },
+    .{ .main_file = "074_comptime9.zig", .output = "My llama value is 2.", .skip = false, .skip_hint = "This is actually correct as it is. :-)" },
     .{
         .main_file = "075_quiz8.zig",
         .output = "Archer's Point--2->Bridge--1->Dogwood Grove--3->Cottage--2->East Pond--1->Fox Pond",
@@ -1099,41 +1093,49 @@ const exercises = [_]Exercise{
         .output = "foo() A",
         .hint = "Read the facts. Use the facts.",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "085_async2.zig",
         .output = "Hello async!",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "086_async3.zig",
         .output = "5 4 3 2 1",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "087_async4.zig",
         .output = "1 2 3 4 5",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "088_async5.zig",
         .output = "Example Title.",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "089_async6.zig",
         .output = ".com: Example Title, .org: Example Title.",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "090_async7.zig",
         .output = "beef? BEEF!",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
     .{
         .main_file = "091_async8.zig",
         .output = "ABCDEF",
         .skip = true,
+        .skip_hint = "async has not been implemented in the current compiler version.",
     },
 
     .{
@@ -1157,7 +1159,7 @@ const exercises = [_]Exercise{
     },
     .{
         .main_file = "095_for3.zig",
-        .output = "1 2 4 7 8 11 13 14 16 17 19",
+        .output = "1 2 4 7 8 11 13 14 16 17 19\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
     },
     .{
         .main_file = "096_memory_allocation.zig",
@@ -1317,6 +1319,14 @@ const exercises = [_]Exercise{
     \\  0111 // (reset state)
     \\& 1110 // (bitmask)
     \\= 0110
+    },
+    .{
+        .main_file = "111_packed.zig",
+        .output = "",
+    },
+    .{
+        .main_file = "112_packed2.zig",
+        .output = "",
     },
     .{
         .main_file = "999_the_end.zig",

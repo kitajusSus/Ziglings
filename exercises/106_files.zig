@@ -40,7 +40,8 @@ pub fn main(init: std.process.Init) !void {
         // by doing nothing
         //
         // we want to catch error.PathAlreadyExists and do nothing
-        error.PathAlreadyExists => {}, // if there's any other unexpected error we just propagate it through
+        ??? => {},
+        // if there's any other unexpected error we just propagate it through
         else => return e,
     };
 
@@ -59,7 +60,7 @@ pub fn main(init: std.process.Init) !void {
     // but here we are not yet done writing to the file
     // if only there were a keyword in Zig that
     // allowed you to "defer" code execution to the end of the scope...
-    defer file.close(io);
+    file.close(io);
 
     // you are not allowed to move these lines above the file closing line!
     var file_writer = file.writer(io, &.{});

@@ -145,7 +145,7 @@ pub fn main() void {
     const mpd_new = calcMaxPairwiseDiffNew(l1, l2);
     print("Max difference (old fn): {d: >5.3}\n", .{mpd_old});
     print("Max difference (new fn): {d: >5.3}\n", .{mpd_new});
-    const skibidi: @Vector(4, i16) = @splat(4);
-    const toilet = [4]@Vector(4, i16){ skibidi, skibidi, skibidi, skibidi };
-    print("sprawdzanie czy tak można {any}\n", .{toilet});
+    // const skibidi: @Vector(4, i16) = @splat(4);
+    // const toilet = [4]@Vector(4, i16){ skibidi, skibidi, skibidi, skibidi };
+    // print("sprawdzanie czy tak można {any}\n", .{toilet});
 }

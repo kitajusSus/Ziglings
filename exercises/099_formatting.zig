@@ -100,7 +100,7 @@
 //
 const std = @import("std");
 const print = std.debug.print;
-
+const p = print;
 pub fn main() !void {
     // Max number to multiply
     const size = 15;
